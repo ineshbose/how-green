@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="bg-gradient-light">
     <router-view></router-view>
   </div>
 </template>
@@ -16,4 +16,11 @@ export default {
 
 <style lang="scss">
 @import "../sass/main";
+
+#app {
+  padding: 5px 10px;
+  margin: 0;
+  min-height: 100vh;
+  max-width: 100vh;
+}
 </style>

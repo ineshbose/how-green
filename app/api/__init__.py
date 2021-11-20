@@ -1,5 +1,3 @@
-""" API Blueprint Application """
-
 from flask import Blueprint, current_app
 from flask_restx import Api
 
@@ -14,4 +12,4 @@ def add_header(response):
 
 
 # Import resources to ensure view is registered
-from .resources import * # NOQA
+from .endpoints import * # NOQA

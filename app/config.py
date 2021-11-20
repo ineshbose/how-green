@@ -1,15 +1,9 @@
-"""
-Global Flask Application Setting
-
-See `.flaskenv` for default settings.
- """
-
 import os
 from app import app
 
 
 class Config(object):
-    FLASK_ENV =  os.getenv('FLASK_ENV', 'debug')
+    FLASK_ENV =  os.getenv('FLASK_ENV', 'development')
     SECRET_KEY = os.getenv('FLASK_SECRET', os.getcwd())
 
     APP_DIR = os.path.dirname(__file__)

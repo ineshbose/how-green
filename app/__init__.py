@@ -10,6 +10,7 @@ app.register_blueprint(api_bp)
 
 from .config import Config
 app.logger.info('>>> {}'.format(Config.FLASK_ENV))
+app.config["DEBUG"] = Config.FLASK_ENV != "production"
 
 @app.route('/')
 def index_client():

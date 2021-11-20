@@ -1,5 +1,3 @@
-""" pytests for Flask """
-
 import pytest
 from app import app
 
@@ -9,29 +7,22 @@ def client():
     return app.test_client()
 
 def test_api(client):
-    resp = client.get('/api/')
-    assert resp.status_code == 200
+    assert client.get('/api/').status_code == 200
 
-def test_resource_one(client):
-    resp = client.get('/api/resource/one')
-    assert resp.status_code == 200
+def test_random_url_get(client):
+    assert client.get('/api/resource/one').status_code == 404
 
-def test_resource_one_post(client):
-    resp = client.post('/api/resource/one')
-    assert resp.status_code == 201
+def test_random_url_post(client):
+    assert client.post('/api/resource/one').status_code == 404
 
-def test_resource_one_patch(client):
-    resp = client.patch('/api/resource/one')
-    assert resp.status_code == 405
+def test_tesco_product_get(client):
+    assert client.get('/api/tesco/301510512').status_code == 200
 
-def test_secure_resource_fail(client):
-    resp = client.get('/api/secure-resource/two')
-    assert resp.status_code == 401
+def test_tesco_product_post(client):
+    assert client.post('/api/tesco/301510512').status_code == 201
 
-def test_secure_resource_pass(client):
-    resp = client.get('/api/secure-resource/two',
-                      headers={'authorization': 'Bearer x'})
-    assert resp.status_code == 200
+def test_tesco_product_patch(client):
+    assert client.patch('/api/tesco/301510512').status_code == 405
 
 @pytest.fixture(scope="module")
 def request_context():
