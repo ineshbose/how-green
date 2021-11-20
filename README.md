@@ -1,14 +1,17 @@
 # How Green?
 
-How Green? is a browser-extension based project for the Human Computer Interaction Coursework.
+How Green? is an application, created for the Human Computer Interaction (H) Coursework, aiming to provide awareness about green shopping.
 
 ## Getting Started
 
 Assuming you have the repository cloned, and Node installed, run:
 
+### Extension
+
 ```sh
-$ npm install
-$ npm run watch
+$ cd extension
+$ yarn              # or npm install
+$ yarn run start    # or npm run start
 ```
 
 The extension will be in `dist/` with `manifest.json` that can be added to your browser.
@@ -17,7 +20,6 @@ The extension will be in `dist/` with `manifest.json` that can be added to your 
 
 * [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions)
 * [Chrome Developers](https://developer.chrome.com/docs/extensions/mv3/getstarted/)
-* [`browser-extension-template`](https://github.com/fregante/browser-extension-template)
 
 ## Team Members
 
