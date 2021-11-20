@@ -1,0 +1,14 @@
+build/*.js
+config/*.js
+#src/api/*
+#src/app/App.vue
+#src/app/*.js
+#src/router/*
+#src/store/*
+#src/components/Case/*
+#src/components/Map/*
+#src/components/Navbar/*
+#src/components/Pages/*
+#src/components/Forms/*
+#src/components/Table/*
+src/*

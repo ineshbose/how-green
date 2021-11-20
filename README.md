@@ -6,6 +6,20 @@ How Green? is an application, created for the Human Computer Interaction (H) Cou
 
 Assuming you have the repository cloned, and Node installed, run:
 
+### Frontend
+
+```sh
+$ yarn              # or npm install
+$ yarn run serve    # or npm run serve
+```
+
+### Backend
+
+```sh
+$ pip install -r requirements.txt   # recommended to use environment
+$ python run.py
+```
+
 ### Extension
 
 ```sh
@@ -20,6 +34,8 @@ The extension will be in `dist/` with `manifest.json` that can be added to your 
 
 * [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions)
 * [Chrome Developers](https://developer.chrome.com/docs/extensions/mv3/getstarted/)
+* [`flask-vuejs-template`](https://github.com/gtalarico/flask-vuejs-template)
+* [`react-typescript-chrome-extension-boilerplate`](https://github.com/sivertschou/react-typescript-chrome-extension-boilerplate)
 
 ## Team Members
 
