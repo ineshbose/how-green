@@ -23,16 +23,23 @@ export default class App extends React.Component<{}, any> {
 
   render() {
     return (
-      <Card style={{ width: '18rem' }}>
-        <Card.Img variant="top" src={logo} />
-        <Card.Body>
-          <Card.Title>Card Title</Card.Title>
-          <Card.Text>
-            Some quick example text to build on the card title and make up the bulk of
-            the card's content.
-          </Card.Text>
-          <Button variant="primary">Go somewhere</Button>
-        </Card.Body>
+      <Card text="white" style={{ width: '18rem', backgroundColor:'#0DD98F', textAlign: 'center'}}>
+        <Card.Img src={logo} />
+          <Card.Body>
+            {/* Really bad way to do positioning lol
+                For anyone reading this, I know there's
+                probably a better way, but it became a meme*/}
+            <Card.Text>
+              Here's a really crappy implementation of our prototype. This should be the screen when 
+              people click on the browser extension. This should be separate from the popup that is shown 
+              when on the Tesco page.
+            </Card.Text>
+            <Card.Text>{"\n"}</Card.Text>
+            <Button variant="primary">Alternatives</Button>
+            &nbsp;&nbsp;&nbsp;
+            <Button variant="primary">Score?</Button>
+          </Card.Body>
+
       </Card>
     );
   }
