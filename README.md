@@ -12,6 +12,7 @@ Assuming you have the repository cloned, and Node installed, run:
 $ yarn              # or npm install
 $ yarn run serve    # or npm run serve
 ```
+If you are having trouble running npm install run `npm install --global yarn` and make sure you have npm added to PATH in your enviroment variables (C:\...\AppData\Roaming\npm). After you have done this run the command 'yarn' and yarn should start to install, then continue on with the installation process. 
 
 ### Backend
 
