@@ -1,27 +1,24 @@
 /* eslint-env es6 */
 /* eslint-disable no-console */
-const path = require('path');
+const path = require("path");
 
 const lintOnSave = true;
 // const IS_PRODUCTION = process.env.NODE_ENV === 'production'
 
 module.exports = {
   lintOnSave,
-  transpileDependencies: [
-      'vuestic-ui',
-  ],
   pages: {
-      index: {
-          entry: 'src/app/main.js',
-          template: 'public/index.html',
-          filename: 'index.html',
-          title: 'How Green',
-          chunks: ['chunk-vendors', 'chunk-common', 'index'],
-      },
+    index: {
+      entry: "src/app/main.js",
+      template: "public/index.html",
+      filename: "index.html",
+      title: "How Green",
+      chunks: ["chunk-vendors", "chunk-common", "index"],
+    },
   },
   productionSourceMap: true,
-  outputDir: 'dist',
-  assetsDir: 'static',
+  outputDir: "dist",
+  assetsDir: "static",
   // baseUrl: IS_PRODUCTION
   // ? 'http://cdn123.com'
   // : '/',
@@ -31,10 +28,10 @@ module.exports = {
   // and distribute
   devServer: {
     proxy: {
-      '/api*': {
+      "/api*": {
         // Forward frontend dev server request for /api to flask dev server
-        target: 'http://localhost:5000/'
-      }
-    }
-  }
-}
+        target: "http://localhost:5000/",
+      },
+    },
+  },
+};
