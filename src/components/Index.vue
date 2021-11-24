@@ -1,43 +1,48 @@
 <template>
-<div>
-  <nav class="navbar navbar-light bg-light">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">
-        <img src="./img/logo.png" alt="" width="40" height="40" class="d-inline-block align-text-top">
-        How Green?
-      </a>
-    </div>
-  </nav>  
-<!-- 
-<div class="container">
-  <div class="row">
-    <div class="col-sm-4">
-      <h3>Column 1</h3>
-      <p>Lorem ipsum dolor..</p>
-    </div>
-    <div class="col-sm-4">
-      <h3>Column 2</h3>
-      <p>Lorem ipsum dolor..</p>
-    </div>
-    <div class="col-sm-4">
-      <h3>Column 3</h3>
-      <p>Lorem ipsum dolor..</p>
-    </div>
-  </div>
-</div>
-</div>
--->
- 
   <div>
-    
-    <b-jumbotron lead="Product Name">
-      <p>For more information visit our website</p>
-      <div class="d-grid gap-2">
-        
-          <div class="col-sm-3"><b-btn class="btn btn-primary" variant="primary" href="https://how-green.herokuapp.com/">More Info</b-btn></div>
-          <div class="col-md-6 col-sm-5"><b-btn class="btn btn-primary" variant="success" to="visualisation" >View Graphs</b-btn></div>
-        
-      </div>
+    <b-navbar variant="light">
+      <b-navbar-brand href="#">
+        <img
+          :src="logo"
+          alt="How Green Logo"
+          width="40"
+          height="40"
+          class="d-inline-block align-top"
+        />
+        How Green?
+      </b-navbar-brand>
+    </b-navbar>
+
+    <!-- <b-container>
+      <b-row>
+        <b-col sm="4">
+          <h3>Column 1</h3>
+          <p>Lorem ipsum dolor..</p>
+        </b-col>
+        <b-col sm="4">
+          <h3>Column 2</h3>
+          <p>Lorem ipsum dolor..</p>
+        </b-col>
+        <b-col sm="4">
+          <h3>Column 3</h3>
+          <p>Lorem ipsum dolor..</p>
+        </b-col>
+      </b-row>
+    </b-container> -->
+
+    <b-jumbotron header="Product Name" header-level="5">
+      <template #lead>
+        For more information, visit our website.
+      </template>
+
+      <b-button variant="primary" href="#">
+        <b-icon icon="info-circle"></b-icon>
+        More Info
+      </b-button>
+      <b-button class="ml-2" variant="success" to="visualisation">
+        <b-icon icon="graph-up"></b-icon>
+        View Graphs
+      </b-button>
     </b-jumbotron>
 
     <b-form-group
@@ -51,26 +56,27 @@
 
     <b-alert variant="success" :show="showAlert">Hello, {{ name }}.</b-alert>
   </div>
-</div>
 </template>
 
 <script>
+import logo from "../assets/img/logo.png";
+
 export default {
-  name: 'index',
+  name: "index",
   components: {},
   data() {
     return {
-      name: ''
-    }
+      name: "",
+      logo: logo,
+    };
   },
   computed: {
     showAlert() {
       return this.name.length > 4;
     },
   },
-}
+};
 </script>
 
 <style scoped>
-
 </style>
