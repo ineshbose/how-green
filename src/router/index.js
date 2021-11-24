@@ -6,7 +6,12 @@ import Visualisation from '../components/Visualisation.vue'
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
+    {
+        path: '*',
+        redirect: { name: 'index' },
+    },
     {
       path: '/',
       name: 'index',

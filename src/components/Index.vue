@@ -1,9 +1,35 @@
 <template>
   <div>
-    <b-jumbotron header="How Green?" lead="Your shopping buddy to shop better.">
-      <p>For more information visit our website</p>
-      <b-btn variant="primary" href="https://how-green.herokuapp.com/">More Info</b-btn>
-      <b-btn variant="success" to="visualisation" class="ml-2">View Graphs</b-btn>
+    <!-- <b-container>
+      <b-row>
+        <b-col sm="4">
+          <h3>Column 1</h3>
+          <p>Lorem ipsum dolor..</p>
+        </b-col>
+        <b-col sm="4">
+          <h3>Column 2</h3>
+          <p>Lorem ipsum dolor..</p>
+        </b-col>
+        <b-col sm="4">
+          <h3>Column 3</h3>
+          <p>Lorem ipsum dolor..</p>
+        </b-col>
+      </b-row>
+    </b-container> -->
+
+    <b-jumbotron header="Product Name" header-level="5">
+      <template #lead>
+        For more information, visit our website.
+      </template>
+
+      <b-button variant="primary" href="#">
+        <b-icon icon="info-circle"></b-icon>
+        More Info
+      </b-button>
+      <b-button class="ml-2" variant="success" to="visualisation">
+        <b-icon icon="graph-up"></b-icon>
+        View Graphs
+      </b-button>
     </b-jumbotron>
 
     <b-form-group
@@ -21,21 +47,20 @@
 
 <script>
 export default {
-  name: 'index',
+  name: "index",
   components: {},
   data() {
     return {
-      name: ''
-    }
+      name: "",
+    };
   },
   computed: {
     showAlert() {
       return this.name.length > 4;
     },
   },
-}
+};
 </script>
 
 <style scoped>
-
 </style>
