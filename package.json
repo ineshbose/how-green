@@ -7,7 +7,9 @@
   "scripts": {
     "serve": "vue-cli-service serve --open",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "postinstall": "yarn build",
+    "test": "vue-cli-service test:unit"
   },
   "dependencies": {
     "@popperjs/core": "^2.9.2",
@@ -30,6 +32,7 @@
     "babel-jest": "^27.0.5",
     "eslint": "^7.29.0",
     "eslint-plugin-vue": "^7.12.1",
+    "lint-staged": "^12.1.2",
     "node-sass": "^6.0.1",
     "sass-loader": "^10.2.0",
     "sass-resources-loader": "^2.2.3",
@@ -43,8 +46,7 @@
   "eslintConfig": {
     "root": true,
     "extends": [
-      "plugin:vue/essential",
-      "@vue/standard"
+      "plugin:vue/essential"
     ]
   },
   "postcss": {
@@ -56,5 +58,18 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "gitHooks": {
+    "pre-commit": "black app && lint-staged"
+  },
+  "lint-staged": {
+    "*.js": [
+      "vue-cli-service lint",
+      "git add"
+    ],
+    "*.vue": [
+      "vue-cli-service lint",
+      "git add"
+    ]
+  }
 }
