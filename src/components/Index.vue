@@ -1,18 +1,5 @@
 <template>
   <div>
-    <b-navbar variant="light">
-      <b-navbar-brand href="#">
-        <img
-          :src="logo"
-          alt="How Green Logo"
-          width="40"
-          height="40"
-          class="d-inline-block align-top"
-        />
-        How Green?
-      </b-navbar-brand>
-    </b-navbar>
-
     <!-- <b-container>
       <b-row>
         <b-col sm="4">
@@ -59,15 +46,12 @@
 </template>
 
 <script>
-import logo from "../assets/img/logo.png";
-
 export default {
   name: "index",
   components: {},
   data() {
     return {
       name: "",
-      logo: logo,
     };
   },
   computed: {
