@@ -16,7 +16,7 @@ export default {
   components: { LineChart },
   data() {
     return {
-      lineData: null,
+      lineData: {},
     }
   },
   mounted() {
