@@ -48,7 +48,7 @@ class TescoProduct(Resource):
 
         fairTrade = bool(random.getrandbits(1))
 
-        return {
+        json = {
             "timestamp": timestamp,
             "product": product_id,
             "product_name": product_name,
@@ -61,6 +61,8 @@ class TescoProduct(Resource):
             "co2emitted": c02,
             "fairTrade": fairTrade,
         }
+
+        return json
 
     def post(self, product_id):
         json_payload = request.json
