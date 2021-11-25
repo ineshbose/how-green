@@ -2,6 +2,7 @@ import requests
 from datetime import datetime
 from flask import request
 from bs4 import BeautifulSoup
+import random
 
 # http://flask-restplus.readthedocs.io
 from flask_restx import Resource
@@ -36,14 +37,32 @@ class TescoProduct(Resource):
         # Find the product price
         product_price = soup.find(class_="price-per-sellable-unit").get_text()
 
+        #Calcualte random score
+        score = random.randint(1,100)
+
+        originCountry = ["South Africa", "Australia", "Italy", "France", "Spain", "Germany", "United States"]
+        originDistance = [13736, 15182, 2641, 1600, 2483, 1643, 3321]
+        originRandom = random.randint(0,len(originDistance)-1)
+
+        c02 = round(random.uniform(0.5,40.5),2)
+
+        fairTrade = bool(random.getrandbits(1))
+
         return {
             "timestamp": timestamp,
             "product": product_id,
             "product_name": product_name,
             "product_description": product_description,
             "product_price": product_price,
+            "score": score,
+            "origin": originCountry[originRandom],
+            "destination": "Scotland",
+            "distanceTravelled": originDistance[originRandom],
+            "co2emitted": c02,
+            "fairTrade": fairTrade,
         }
 
     def post(self, product_id):
         json_payload = request.json
         return {"timestamp": json_payload}, 201
+
