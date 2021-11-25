@@ -60,16 +60,14 @@
     "not ie <= 8"
   ],
   "gitHooks": {
-    "pre-commit": "black app && lint-staged"
+    "pre-commit": "black app && git add . && lint-staged"
   },
   "lint-staged": {
     "*.js": [
-      "vue-cli-service lint",
-      "git add"
+      "vue-cli-service lint"
     ],
     "*.vue": [
-      "vue-cli-service lint",
-      "git add"
+      "vue-cli-service lint"
     ]
   }
 }

@@ -1,8 +1,8 @@
 from flask import Blueprint, current_app
-from flask_restx import Api
+from flask_restx import Api, cors
 
 api_bp = Blueprint("api_bp", __name__, url_prefix="/api")
-api_rest = Api(api_bp)
+api_rest = Api(api_bp, decorators=[cors.crossdomain(origin="*")])
 
 
 @api_bp.after_request

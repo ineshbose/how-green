@@ -24,32 +24,17 @@
 import LineChart from "./charts/LineChart";
 import BarChart from "./charts/BarChart";
 import RadarChart from "./charts/RadarChart";
-import axios from 'axios';
-
-//let url = "http://localhost:5000/api/tesco/302302779" 
-
-// new Vue({
-//   el: '#app',
-//   data () {
-//     return {
-//       info: null
-//     }
-//   },
-//   mounted () {
-//     axios
-//       .get("http://127.0.0.1:5000/api/tesco/302302779")
-//       .then(response => (this.info = response))
-//   }
-// })
-
-
+import axios from "axios";
 
 export default {
   name: 'visualisation',
   components: { LineChart, BarChart, RadarChart },
   data() {
     return {
-      lineData: null,
+      lineData: {},
+      radarData: {},
+      barData: {},
+      info: "",
     }
   },
   mounted() {
@@ -57,25 +42,18 @@ export default {
     this.fillData();
   },
   methods: {
-    // GET request for product data
-    // currently successfully makes call to backend
-    // however error when data sent from backend to here
-    // 'GET http://localhost:5000/api/tesco/302302779 net::ERR_FAILED'
-    //
-    // 'Access to XMLHttpRequest at 'http://localhost:5000/api/tesco/302302779' from origin 'http://localhost:8080' has been blocked by CORS policy: 
-    // Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.'
     getProductData() {
-      axios.get('http://localhost:5000/api/tesco/302302779', { headers: {
-            "Access-Control-Allow-Origin" : "*",
-            "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36"
+      axios.get('http://localhost:5000/api/tesco/302302779', {
+        headers: {
+            "Content-Type": "application/json",
         }})
       .then(response => {
-        console.log(response)
+        console.log(response.data)
       })
       .catch((error) => {
         console.log(error)
       })
-    }, 
+    },
     fillData() {
       this.lineData = {
         labels: [this.getRandomInt(), this.getRandomInt()],
