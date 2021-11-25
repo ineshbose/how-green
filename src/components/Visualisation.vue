@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     getProductData() {
-      axios.get('http://localhost:5000/api/tesco/302302779', {
+      axios.get(`http://localhost:5000/api/${this.$route.params.store}/${this.$route.params.id}`, {
         headers: {
             "Content-Type": "application/json",
         }})

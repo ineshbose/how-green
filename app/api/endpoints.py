@@ -1,5 +1,5 @@
 import requests
-from datetime import datetime
+from datetime import datetime, time
 from flask import request
 from bs4 import BeautifulSoup
 import random
@@ -14,6 +14,7 @@ from . import api_rest
 class TescoProduct(Resource):
     def get(self, product_id):
         timestamp = datetime.utcnow().isoformat()
+        json = {"timestamp": timestamp, "product": None}
 
         # Headers so we don't get blocked by tesco
         headers = {
@@ -23,52 +24,54 @@ class TescoProduct(Resource):
         # Get the page with reuest and convert to beautiful soup
         url = f"https://www.tesco.com/groceries/en-GB/products/{product_id}"
         page = requests.get(url, headers=headers, timeout=120)
-        soup = BeautifulSoup(page.content, "html.parser")
 
-        # Find the description of the product
-        descriptors = soup.find_all(class_="product-info-block__content-item")
+        if page.status_code == 200:
+            soup = BeautifulSoup(page.content, "html.parser")
 
-        # Find the product name
-        product_name = soup.find("title").get_text().split(" - ")[0]
+            # Find the description of the product
+            descriptors = soup.find_all(class_="product-info-block__content-item")
 
-        # Create product description from descriptors
-        product_description = " ".join(d.get_text() for d in descriptors)
+            # Find the product name
+            product_name = soup.find("title").get_text().split(" - ")[0]
 
-        # Find the product price
-        product_price = soup.find(class_="price-per-sellable-unit").get_text()
+            # Create product description from descriptors
+            product_description = " ".join(d.get_text() for d in descriptors)
 
-        # Calcualte random score
-        score = random.randint(1, 100)
+            # Find the product price
+            product_price = soup.find(class_="price-per-sellable-unit").get_text()
 
-        originCountry = [
-            "South Africa",
-            "Australia",
-            "Italy",
-            "France",
-            "Spain",
-            "Germany",
-            "United States",
-        ]
-        originDistance = [13736, 15182, 2641, 1600, 2483, 1643, 3321]
-        originRandom = random.randint(0, len(originDistance) - 1)
+            # Calcualte random score
+            score = random.randint(1, 100)
 
-        c02 = round(random.uniform(0.5, 40.5), 2)
+            originCountry = [
+                "South Africa",
+                "Australia",
+                "Italy",
+                "France",
+                "Spain",
+                "Germany",
+                "United States",
+            ]
+            originDistance = [13736, 15182, 2641, 1600, 2483, 1643, 3321]
+            originRandom = random.randint(0, len(originDistance) - 1)
 
-        fairTrade = bool(random.getrandbits(1))
+            c02 = round(random.uniform(0.5, 40.5), 2)
 
-        json = {
-            "timestamp": timestamp,
-            "product": product_id,
-            "product_name": product_name,
-            "product_description": product_description,
-            "product_price": product_price,
-            "score": score,
-            "origin": originCountry[originRandom],
-            "destination": "Scotland",
-            "distanceTravelled": originDistance[originRandom],
-            "co2emitted": c02,
-            "fairTrade": fairTrade,
-        }
+            fairTrade = bool(random.getrandbits(1))
+
+            json = {
+                "timestamp": timestamp,
+                "product": product_id,
+                "product_name": product_name,
+                "product_description": product_description,
+                "product_price": product_price,
+                "score": score,
+                "origin": originCountry[originRandom],
+                "destination": "Scotland",
+                "distanceTravelled": originDistance[originRandom],
+                "co2emitted": c02,
+                "fairTrade": fairTrade,
+            }
 
         return json
 
