@@ -4,12 +4,13 @@
    
     <b-jumbotron header="Product Name" header-level="5">
       <template #lead>
-        For more information, visit our website.
+        Product rating: ?%
+      
       </template>
 
-      <b-button variant="primary" href="#">
+      <b-button class="ml-2" variant="success" @click="$router.push({ name: 'product-alt'} )">
         <b-icon icon="info-circle"></b-icon>
-        More Info
+        Alternative Products
       </b-button>
       <b-button class="ml-2" variant="success" @click="$router.push({ name: 'product-vis'} )">
         <b-icon icon="graph-up"></b-icon>
