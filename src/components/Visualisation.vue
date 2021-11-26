@@ -34,6 +34,7 @@ export default {
       lineData: {},
       radarData: {},
       barData: {},
+      productProperties: {},
       info: "",
     }
   },
@@ -49,12 +50,18 @@ export default {
         }})
       .then(response => {
         console.log(response.data)
+        this.productProperties = response.data
+        // here the response JSON object is saved to productProperties 
+        // however, from within the fillData function it doesnt seem to be
+        //console.log(this.productProperties.co2emitted_prod)
       })
       .catch((error) => {
         console.log(error)
       })
     },
     fillData() {
+      // trying to access productProperties and nothing happens
+      //console.log(this.productProperties.co2emitted_prod);
       this.lineData = {
         labels: [this.getRandomInt(), this.getRandomInt()],
         datasets: [
@@ -75,6 +82,7 @@ export default {
         datasets: [
           {
             label: 'My First Dataset',
+            //data: [this.productProperties.co2emitted_prod, this.productProperties.co2emitted_ship, this.productProperties.energy_consumption_prod, this.productProperties.energy_consumption_ship, 56],
             data: [65, 59, 80, 81, 56, 55, 40],
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',

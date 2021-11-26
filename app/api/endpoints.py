@@ -55,7 +55,13 @@ class TescoProduct(Resource):
             originDistance = [13736, 15182, 2641, 1600, 2483, 1643, 3321]
             originRandom = random.randint(0, len(originDistance) - 1)
 
-            c02 = round(random.uniform(0.5, 40.5), 2)
+            c02_production = round(random.uniform(0.5, 40.5), 2)
+
+            c02_shipping = round(random.uniform(0.5, 40.5), 2)
+
+            energy_consumption_prod = round(random.uniform(0.5, 40.5), 2)
+
+            energy_consumption_ship = round(random.uniform(0.5, 40.5), 2)
 
             fairTrade = bool(random.getrandbits(1))
 
@@ -69,8 +75,11 @@ class TescoProduct(Resource):
                 "origin": originCountry[originRandom],
                 "destination": "Scotland",
                 "distanceTravelled": originDistance[originRandom],
-                "co2emitted": c02,
                 "fairTrade": fairTrade,
+                "c02_production": c02_production,
+                "c02_shipping": c02_shipping,
+                "energy_consumption_prod": energy_consumption_prod,
+                "energy_consumption_ship": energy_consumption_ship,
             }
 
         return json
