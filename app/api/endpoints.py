@@ -61,16 +61,17 @@ class TescoProduct(Resource):
 
             json = {
                 "timestamp": timestamp,
-                "product": product_id,
-                "product_name": product_name,
-                "product_description": product_description,
-                "product_price": product_price,
+                "id": product_id,
+                "name": product_name,
+                "description": product_description,
+                "price": product_price,
                 "score": score,
                 "origin": originCountry[originRandom],
                 "destination": "Scotland",
-                "distanceTravelled": originDistance[originRandom],
-                "co2emitted": c02,
+                "distance": originDistance[originRandom],
+                "co2": c02,
                 "fairTrade": fairTrade,
+                "alternatives": [],
             }
 
         return json
