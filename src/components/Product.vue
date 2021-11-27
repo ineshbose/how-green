@@ -4,7 +4,8 @@
    
     <b-jumbotron header="Product Name" header-level="5">
       <template #lead>
-        Product rating: ?%
+        Product rating: {{getRandomInt()}}% <br>
+        Product id: {{$route.params.id}} <br>
       
       </template>
 
@@ -26,8 +27,27 @@ export default {
   components: {},
   data() {
     return {
-    };
+       product: null,
+       alternativesProducts : null,
+      info: "",
+    }
   },
+  async mounted() {
+    await this.getProductData();
+    this.fillData();
+  },
+  methods: {
+    async getProductData() {
+      const response = await axios.get(`http://localhost:5000/api/${this.$route.params.store}/${this.$route.params.id}`);
+      this.product = response.data;
+    },
+    getAlternativeData() {
+      this.alternativesProducts = [this.product.name].concat(this.product.alternatives.map((alternative) => (alternative.name)));
+    },
+    getRandomInt() {
+      return Math.floor(Math.random() * (50 - 5 + 1)) + 5
+    },
+  }
 };
 </script>
 

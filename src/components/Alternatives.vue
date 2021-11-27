@@ -4,9 +4,10 @@
 
     <b-button class="ml-2" variant="success" @click="$router.push({ name: 'product-page'} )">
         <b-icon icon="arrow-left-square"></b-icon>
-        Bachk to Product Overview
+        Product Overview
       </b-button>
 
+     
     
 
      <div class="mt-4">
