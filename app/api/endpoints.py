@@ -1,15 +1,28 @@
+import random
 import requests
-from datetime import datetime, time
+from datetime import datetime
+
 from flask import request
 from bs4 import BeautifulSoup
-import random
 
 # http://flask-restplus.readthedocs.io
 from flask_restx import Resource
 
 from . import api_rest
 
+
 PRODUCTS_CACHE = {"tesco": {}, "sainsbury": {}}
+
+
+def check_cache(func):
+    def execute(product_id, *args, **kwargs):
+        return (
+            PRODUCTS_CACHE["tesco"][product_id]
+            if PRODUCTS_CACHE["tesco"].get(product_id)
+            else func()
+        )
+
+    return execute
 
 
 @api_rest.route("/tesco/<int:product_id>")
@@ -38,6 +51,11 @@ class TescoProduct(Resource):
 
             # Find the product name
             product_name = soup.find("title").get_text().split(" - ")[0]
+
+            # Find the product image
+            product_image = soup.find(class_="product-image product-image-visible").get(
+                "src"
+            )
 
             # Create product description from descriptors
             product_description = " ".join(d.get_text() for d in descriptors)
@@ -88,16 +106,19 @@ class TescoProduct(Resource):
                         {
                             "id": alternative_links[i]["href"].split("/")[-1],
                             "name": alternative_names[i].get_text(),
-                            "img_src": alternative_images[i]["src"],
+                            "img": alternative_images[i]["src"],
                             "score": r_score,
-                            "co2": {"production":c02_production, "shipping":c02_shipping},
+                            "co2": {
+                                "production": c02_production,
+                                "shipping": c02_shipping,
+                            },
                         }
                     )
 
             # Calcualte random score
             score = random.randint(1, 100)
 
-            originCountry = [
+            origin_country = [
                 "South Africa",
                 "Australia",
                 "Italy",
@@ -106,8 +127,8 @@ class TescoProduct(Resource):
                 "Germany",
                 "United States",
             ]
-            originDistance = [13736, 15182, 2641, 1600, 2483, 1643, 3321]
-            originRandom = random.randint(0, len(originDistance) - 1)
+            origin_distance = [13736, 15182, 2641, 1600, 2483, 1643, 3321]
+            origin_random = random.randint(0, len(origin_distance) - 1)
 
             c02_production = round(random.uniform(0.5, 40.5), 2)
 
@@ -123,15 +144,22 @@ class TescoProduct(Resource):
                 "timestamp": timestamp,
                 "id": product_id,
                 "name": product_name,
+                "img": product_image,
                 "description": product_description,
                 "price": product_price,
                 "score": score,
-                "origin": originCountry[originRandom],
-                "destination": "Scotland",
-                "distance": originDistance[originRandom],
+                "origin": {"name": origin_country[origin_random]},
+                "destination": {"name": "Scotland"},
+                "distance": origin_distance[origin_random],
                 "fair_trade": fair_trade,
-                "co2": {"production":c02_production, "shipping":c02_shipping},
-                "energy": {"production": energy_consumption_prod, "shipping": energy_consumption_ship},
+                "co2": {
+                    "production": c02_production,
+                    "shipping": c02_shipping,
+                },
+                "energy": {
+                    "production": energy_consumption_prod,
+                    "shipping": energy_consumption_ship,
+                },
                 "alternatives": alternative_products,
             }
 

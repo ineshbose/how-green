@@ -12,8 +12,6 @@ How Green? is an application, created for the Human Computer Interaction (H) Cou
 
 ## Getting Started
 
-Assuming you have the repository cloned, and Node installed, run:
-
 ### Prerequisites
 
 #### Cloning this Repository

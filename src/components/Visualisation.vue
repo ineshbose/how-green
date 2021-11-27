@@ -1,22 +1,23 @@
 <template>
   <div>
     <b-jumbotron header="Graphs">
-      <b-btn variant="dark" to="/">Home</b-btn>
+      <b-button variant="dark" to="/">Home</b-button>
     </b-jumbotron>
-    <div class="container">
-      <div id="user-info">
+    <b-container fluid v-if="product">
+      <b-row>
         {{ info }}
-      </div>
-      <!-- <div class="columned">
+      </b-row>
+      <!-- <b-row cols="3">
         <LineChart :chart-data="lineData"></LineChart>
-      </div> -->
-      <div>
-        <BarChart :chart-data="barData" ></BarChart>
-      </div>
-      <!-- <div class="columned">
+      </b-row> -->
+      <b-row>
+        <BarChart :chart-data="barData"></BarChart>
+      </b-row>
+      <!-- <b-row cols="3">
         <RadarChart :chart-data="radarData"></RadarChart>
-      </div> -->
-    </div>
+      </b-row> -->
+    </b-container>
+    <b-spinner v-else variant="success" label="loading"></b-spinner>
   </div>
 </template>
 
@@ -28,13 +29,17 @@ import axios from "axios";
 
 export default {
   name: 'visualisation',
-  components: { LineChart, BarChart, RadarChart },
+  components: {
+    // LineChart,
+    BarChart,
+    // RadarChart
+  },
   data() {
     return {
+      barData: {},
       lineData: {},
       radarData: {},
-      barData: {},
-      productProperties: {},
+      product: null,
       info: "",
     }
   },
@@ -44,16 +49,15 @@ export default {
   },
   methods: {
     async getProductData() {
-      const response = await axios.get(`http://localhost:5000/api/${this.$route.params.store}/${this.$route.params.id}`)
-      this.productProperties = response.data;
-      console.log(this.productProperties.alternatives[0].co2.shipping);
+      const response = await axios.get(`http://localhost:5000/api/${this.$route.params.store}/${this.$route.params.id}`);
+      this.product = response.data;
     },
     fillData() {
       // this.lineData = {
       //   labels: [this.getRandomInt(), this.getRandomInt()],
       //   datasets: [
       //     {
-      //       label: this.productProperties.name,
+      //       label: this.product.name,
       //       backgroundColor: '#f87979',
       //       data: [this.getRandomInt(), this.getRandomInt()],
       //     },
@@ -65,12 +69,11 @@ export default {
       //   ],
       // };
       this.barData = {
-        
-        labels: [this.productProperties.name, this.productProperties.alternatives[0].name, this.productProperties.alternatives[1].name, this.productProperties.alternatives[2].name, this.productProperties.alternatives[3].name, this.productProperties.alternatives[4].name],
+        labels: [this.product.name].concat(this.product.alternatives.map((alternative) => (alternative.name))), // [this.product.name, this.product.alternatives[0].name, this.product.alternatives[1].name, this.product.alternatives[2].name, this.product.alternatives[3].name, this.product.alternatives[4].name],
         datasets: [
           {
             label: "C02 Emission - Product vs Alternatives" ,
-            data: [this.productProperties.co2.shipping, this.productProperties.alternatives[0].co2.shipping, this.productProperties.alternatives[1].co2.shipping, this.productProperties.alternatives[2].co2.shipping, this.productProperties.alternatives[3].co2.shipping, this.productProperties.alternatives[4].co2.shipping],
+            data: [this.product.co2.shipping].concat(this.product.alternatives.map((alternative) => (alternative.co2.shipping))), //[this.product.co2.shipping, this.product.alternatives[0].co2.shipping, this.product.alternatives[1].co2.shipping, this.product.alternatives[2].co2.shipping, this.product.alternatives[3].co2.shipping, this.product.alternatives[4].co2.shipping],
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
               'rgba(255, 159, 64, 0.2)',
@@ -132,16 +135,4 @@ export default {
 </script>
 
 <style scoped>
-  .small {
-    max-width: 600px;
-    margin: 150px auto;
-  }
-
-  .container{
-    column-count: 1;
-  }
-  .columned{
-    column-count: 3;
-    column-gap: auto;
-  }
 </style>

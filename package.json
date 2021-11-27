@@ -62,7 +62,7 @@
     "not ie <= 8"
   ],
   "gitHooks": {
-    "pre-commit": "black app && git add . && lint-staged"
+    "pre-commit": "python -m black app && git add . && lint-staged"
   },
   "lint-staged": {
     "*.js": [
