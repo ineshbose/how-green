@@ -14,7 +14,7 @@
     <b-card img-src="https://placekitten.com/100/100" img-alt="Card image" img-left class="mb-3">
       <b-card-text>
         {{product.alternatives[0].name}} <br>             
-        Product percentage: {{getRandomInt()}}% <br>
+        Product percentage: {{product.alternatives[0].score}}% <br>
         <b-button variant="primary" href="#">
         <b-icon icon="shop-window"></b-icon>
         View Product
@@ -26,8 +26,8 @@
     <b-card img-src="https://placekitten.com/100/100" img-alt="Card image" img-left class="mb-3">
       <b-card-text>
         {{product.alternatives[1].name}} <br>             
-        Product percentage: {{getRandomInt()}}% <br>
-        <b-button variant="primary" href="#">
+        Product percentage: {{product.alternatives[1].score}}% <br>
+        <b-button class="ml-2" variant="success" @click="$router.push({ name: 'product'} )">
         <b-icon icon="shop-window"></b-icon>
         View Product
       </b-button>
