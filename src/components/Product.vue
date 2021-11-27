@@ -2,11 +2,13 @@
   <div>
     
    
-    <b-jumbotron header="Product Name" header-level="5">
-      <template #lead>
-        Product rating: {{getRandomInt()}}% <br>
-        Product id: {{$route.params.id}} <br>
+    <b-jumbotron header-level="5" > 
+    
       
+      <template #lead>
+        Product Name: {{product.name}} <br>
+        Product rating: {{getRandomInt()}}% <br>
+   
       </template>
 
       <b-button class="ml-2" variant="success" @click="$router.push({ name: 'product-alt'} )">
@@ -18,10 +20,12 @@
         View Graphs
       </b-button>
     </b-jumbotron>
+    <!--<b-spinner v-else variant="success" label="loading"></b-spinner>-->
   </div>
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "product",
   components: {},

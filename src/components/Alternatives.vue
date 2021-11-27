@@ -13,8 +13,8 @@
      <div class="mt-4">
     <b-card img-src="https://placekitten.com/100/100" img-alt="Card image" img-left class="mb-3">
       <b-card-text>
-        Product name <br>             
-        Product percentage <br>
+        {{product.alternatives[0].name}} <br>             
+        Product percentage: {{getRandomInt()}}% <br>
         <b-button variant="primary" href="#">
         <b-icon icon="shop-window"></b-icon>
         View Product
@@ -25,8 +25,8 @@
     <div class="mt-4">
     <b-card img-src="https://placekitten.com/100/100" img-alt="Card image" img-left class="mb-3">
       <b-card-text>
-        Product name <br>             
-        Product percentage <br>
+        {{product.alternatives[1].name}} <br>             
+        Product percentage: {{getRandomInt()}}% <br>
         <b-button variant="primary" href="#">
         <b-icon icon="shop-window"></b-icon>
         View Product
@@ -52,6 +52,7 @@
 
 
 <script>
+import axios from "axios";
 export default { 
   name: 'alternatives',
   components: { },
