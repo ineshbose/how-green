@@ -7,15 +7,15 @@
       <div id="user-info">
         {{ info }}
       </div>
-      <div class="columned">
+      <!-- <div class="columned">
         <LineChart :chart-data="lineData"></LineChart>
+      </div> -->
+      <div>
+        <BarChart :chart-data="barData" ></BarChart>
       </div>
-      <div class="columned">
-        <BarChart :chart-data="barData"></BarChart>
-      </div>
-      <div class="columned">
+      <!-- <div class="columned">
         <RadarChart :chart-data="radarData"></RadarChart>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -38,52 +38,39 @@ export default {
       info: "",
     }
   },
-  mounted() {
-    this.getProductData();
+  async mounted() {
+    await this.getProductData();
     this.fillData();
   },
   methods: {
-    getProductData() {
-      axios.get(`http://localhost:5000/api/${this.$route.params.store}/${this.$route.params.id}`, {
-        headers: {
-            "Content-Type": "application/json",
-        }})
-      .then(response => {
-        console.log(response.data)
-        this.productProperties = response.data
-        // here the response JSON object is saved to productProperties 
-        // however, from within the fillData function it doesnt seem to be
-        //console.log(this.productProperties.co2emitted_prod)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+    async getProductData() {
+      const response = await axios.get(`http://localhost:5000/api/${this.$route.params.store}/${this.$route.params.id}`)
+      this.productProperties = response.data;
+      console.log(this.productProperties.alternatives[0].co2.shipping);
     },
     fillData() {
-      // trying to access productProperties and nothing happens
-      //console.log(this.productProperties.co2emitted_prod);
-      this.lineData = {
-        labels: [this.getRandomInt(), this.getRandomInt()],
-        datasets: [
-          {
-            label: 'Data One',
-            backgroundColor: '#f87979',
-            data: [this.getRandomInt(), this.getRandomInt()],
-          },
-          {
-            label: 'Data Two',
-            backgroundColor: '#00f233',
-            data: [this.getRandomInt(), this.getRandomInt()],
-          },
-        ],
-      };
+      // this.lineData = {
+      //   labels: [this.getRandomInt(), this.getRandomInt()],
+      //   datasets: [
+      //     {
+      //       label: this.productProperties.name,
+      //       backgroundColor: '#f87979',
+      //       data: [this.getRandomInt(), this.getRandomInt()],
+      //     },
+      //     {
+      //       label: 'Data Two',
+      //       backgroundColor: '#00f233',
+      //       data: [this.getRandomInt(), this.getRandomInt()],
+      //     },
+      //   ],
+      // };
       this.barData = {
-        labels: ['Product 1', 'Product 2', 'Product 3', 'Product 4', 'Product 5'],
+        
+        labels: [this.productProperties.name, this.productProperties.alternatives[0].name, this.productProperties.alternatives[1].name, this.productProperties.alternatives[2].name, this.productProperties.alternatives[3].name, this.productProperties.alternatives[4].name],
         datasets: [
           {
-            label: 'My First Dataset',
-            //data: [this.productProperties.co2emitted_prod, this.productProperties.co2emitted_ship, this.productProperties.energy_consumption_prod, this.productProperties.energy_consumption_ship, 56],
-            data: [65, 59, 80, 81, 56, 55, 40],
+            label: "C02 Emission - Product vs Alternatives" ,
+            data: [this.productProperties.co2.shipping, this.productProperties.alternatives[0].co2.shipping, this.productProperties.alternatives[1].co2.shipping, this.productProperties.alternatives[2].co2.shipping, this.productProperties.alternatives[3].co2.shipping, this.productProperties.alternatives[4].co2.shipping],
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
               'rgba(255, 159, 64, 0.2)',
@@ -106,36 +93,36 @@ export default {
           }
         ]
       };
-      this.radarData = {
-        labels: [
-          'Eating',
-          'Drinking',
-          'Sleeping',
-          'Designing',
-          'Coding'
-        ],
-        datasets: [{
-          label: 'This Product',
-          data: [65, 59, 90, 81, 56],
-          fill: true,
-          backgroundColor: 'rgba(255, 99, 132, 0.2)',
-          borderColor: 'rgb(255, 99, 132)',
-          pointBackgroundColor: 'rgb(255, 99, 132)',
-          pointBorderColor: '#fff',
-          pointHoverBackgroundColor: '#fff',
-          pointHoverBorderColor: 'rgb(255, 99, 132)'
-        }, {
-          label: 'Alternative Product',
-          data: [28, 48, 40, 19, 96],
-          fill: true,
-          backgroundColor: 'rgba(54, 162, 235, 0.2)',
-          borderColor: 'rgb(54, 162, 235)',
-          pointBackgroundColor: 'rgb(54, 162, 235)',
-          pointBorderColor: '#fff',
-          pointHoverBackgroundColor: '#fff',
-          pointHoverBorderColor: 'rgb(54, 162, 235)'
-        }]
-      };
+      // this.radarData = {
+      //   labels: [
+      //     'Eating',
+      //     'Drinking',
+      //     'Sleeping',
+      //     'Designing',
+      //     'Coding'
+      //   ],
+      //   datasets: [{
+      //     label: 'This Product',
+      //     data: [65, 59, 90, 81, 56],
+      //     fill: true,
+      //     backgroundColor: 'rgba(255, 99, 132, 0.2)',
+      //     borderColor: 'rgb(255, 99, 132)',
+      //     pointBackgroundColor: 'rgb(255, 99, 132)',
+      //     pointBorderColor: '#fff',
+      //     pointHoverBackgroundColor: '#fff',
+      //     pointHoverBorderColor: 'rgb(255, 99, 132)'
+      //   }, {
+      //     label: 'Alternative Product',
+      //     data: [28, 48, 40, 19, 96],
+      //     fill: true,
+      //     backgroundColor: 'rgba(54, 162, 235, 0.2)',
+      //     borderColor: 'rgb(54, 162, 235)',
+      //     pointBackgroundColor: 'rgb(54, 162, 235)',
+      //     pointBorderColor: '#fff',
+      //     pointHoverBackgroundColor: '#fff',
+      //     pointHoverBorderColor: 'rgb(54, 162, 235)'
+      //   }]
+      // };
     },
     getRandomInt() {
       return Math.floor(Math.random() * (50 - 5 + 1)) + 5

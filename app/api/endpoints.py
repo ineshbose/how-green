@@ -9,10 +9,15 @@ from flask_restx import Resource
 
 from . import api_rest
 
+PRODUCTS_CACHE = {"tesco": {}, "sainsbury": {}}
+
 
 @api_rest.route("/tesco/<int:product_id>")
 class TescoProduct(Resource):
     def get(self, product_id):
+        if PRODUCTS_CACHE["tesco"].get(product_id):
+            return PRODUCTS_CACHE["tesco"][product_id]
+
         timestamp = datetime.utcnow().isoformat()
         json = {"timestamp": timestamp, "product": None}
 
@@ -40,6 +45,55 @@ class TescoProduct(Resource):
             # Find the product price
             product_price = soup.find(class_="price-per-sellable-unit").get_text()
 
+            # Find 5 alternatives for the relevant category
+            alternative_products = []
+
+            # Find the product category
+            alternatives_category = soup.find_all(
+                class_="styled__Anchor-sc-1xizymv-0 qbbMw beans-breadcrumb__list-item-link beans-link__anchor"
+            )
+            alt_cat_link = alternatives_category[-2]["href"]
+
+            # Make a new request to the product category and retrieve alternatives
+            alt_url = f"https://www.tesco.com{alt_cat_link}"
+            alt_page = requests.get(alt_url, headers=headers, timeout=120)
+
+            # This seems to be working fine, however img src is returning something strange
+            if alt_page.status_code == 200:
+                alt_soup = BeautifulSoup(alt_page.content, "html.parser")
+                alternative_names = alt_soup.find_all(
+                    "h3", {"class": "ui__StyledTitle-sc-18aswmp-1 dTQrMR"}
+                )
+                alternative_links = alt_soup.find_all(
+                    "a", {"class": "product-image-wrapper"}
+                )
+                alternative_images = alt_soup.find_all(
+                    "img", {"class": "product-image"}
+                )
+                for i in range(5):
+                    r_score = 0
+
+                    # If the alternative product already exists in our product catalogue, grab the score
+                    if PRODUCTS_CACHE["tesco"].get(
+                        alternative_links[i]["href"].split("/")[-1]
+                    ):
+                        r_score = PRODUCTS_CACHE[
+                            "tesco"[alternative_links[i]["href"].split("/")[-1]]
+                        ]["score"]
+                    else:
+                        r_score = random.randint(1, 100)
+                        c02_production = round(random.uniform(0.5, 40.5), 2)
+                        c02_shipping = round(random.uniform(0.5, 40.5), 2)
+                    alternative_products.append(
+                        {
+                            "id": alternative_links[i]["href"].split("/")[-1],
+                            "name": alternative_names[i].get_text(),
+                            "img_src": alternative_images[i]["src"],
+                            "score": r_score,
+                            "co2": {"production":c02_production, "shipping":c02_shipping},
+                        }
+                    )
+
             # Calcualte random score
             score = random.randint(1, 100)
 
@@ -63,25 +117,25 @@ class TescoProduct(Resource):
 
             energy_consumption_ship = round(random.uniform(0.5, 40.5), 2)
 
-            fairTrade = bool(random.getrandbits(1))
+            fair_trade = bool(random.getrandbits(1))
 
             json = {
                 "timestamp": timestamp,
-                "product": product_id,
-                "product_name": product_name,
-                "product_description": product_description,
-                "product_price": product_price,
+                "id": product_id,
+                "name": product_name,
+                "description": product_description,
+                "price": product_price,
                 "score": score,
                 "origin": originCountry[originRandom],
                 "destination": "Scotland",
-                "distanceTravelled": originDistance[originRandom],
-                "fairTrade": fairTrade,
-                "c02_production": c02_production,
-                "c02_shipping": c02_shipping,
-                "energy_consumption_prod": energy_consumption_prod,
-                "energy_consumption_ship": energy_consumption_ship,
+                "distance": originDistance[originRandom],
+                "fair_trade": fair_trade,
+                "co2": {"production":c02_production, "shipping":c02_shipping},
+                "energy": {"production": energy_consumption_prod, "shipping": energy_consumption_ship},
+                "alternatives": alternative_products,
             }
 
+        PRODUCTS_CACHE["tesco"][product_id] = json
         return json
 
     def post(self, product_id):
