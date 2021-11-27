@@ -6,7 +6,7 @@
       <template #lead>
         Product rating: {{getRandomInt()}}% <br>
         Product id: {{$route.params.id}} <br>
-      
+        {{getname()}}
       </template>
 
       <b-button class="ml-2" variant="success" @click="$router.push({ name: 'product-alt'} )">
@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   name: "product",
   components: {},
@@ -43,6 +44,9 @@ export default {
     },
     getAlternativeData() {
       this.alternativesProducts = [this.product.name].concat(this.product.alternatives.map((alternative) => (alternative.name)));
+    },
+    getname()  {
+      return (this.product.name)
     },
     getRandomInt() {
       return Math.floor(Math.random() * (50 - 5 + 1)) + 5
