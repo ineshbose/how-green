@@ -77,22 +77,22 @@ export default class App extends React.Component<{}, any> {
   render() {
     const { product } = this.state;
 
-    return (
-      <Navbar style={{ backgroundColor: '#0DD98F' }}>
-        <Container>
-          <Navbar.Brand onClick={() => this.goToPage('')}>
-            <img
-              alt=""
-              src={logo}
-              width="30"
-              height="30"
-              className="d-inline-block align-top"
-            />{' '}
-            How Green?
-          </Navbar.Brand>
-        </Container>
-      </Navbar>
-    )
+    //return (
+    //  <Navbar style={{ backgroundColor: '#0DD98F' }}>
+    //    <Container>
+    //      <Navbar.Brand onClick={() => this.goToPage('')}>
+    //        <img
+    //          alt=""
+    //          src={logo}
+    //          width="30"
+    //          height="30"
+    //         className="d-inline-block align-top"
+    //        />{' '}
+    //        How Green?
+    //      </Navbar.Brand>
+    //    </Container>
+    //  </Navbar>
+    //)
 
     return (
       <Card text="white" style={{ width: '20rem', backgroundColor:'#0DD98F' }}>
@@ -105,15 +105,18 @@ export default class App extends React.Component<{}, any> {
             )
           : (
           <>
-            <Tabs defaultActiveKey="score" className="mb-3 nav-fill">
+            <Tabs defaultActiveKey="score" className="mb-3 nav-fill" style={{color: '#61dafb', backgroundColor:'#f6f6f6' }}>
               <Tab eventKey="score" title="Score">
                 <Card.Body>
                   <Card.Title as={divWithClassName('h3')}>
                     {product.name}
+                    <Card.Text>{"\n"}</Card.Text>
                     <ProgressBar now={product.score} label={`${product.score}%`} />
                     <Badge bg="light" text="dark" as={divWithClassName('h1 d-block my-2')}>{product.score}%</Badge>
                   </Card.Title>
-                  <Button onClick={() => this.goToPage(`http://localhost:8080/product/tesco/${product.id}`)} variant="primary">In the Score?</Button>
+                  <Card.Text>{"\n"}</Card.Text>
+                  <Card.Text>{"\n"}</Card.Text>
+                  <Button onClick={() => this.goToPage(`http://localhost:8080/product/tesco/${product.id}`)} className="float-end" variant="primary">In the Score?</Button>
                 </Card.Body>
               </Tab>
               <Tab eventKey="alternatives" title="Alternatives">
