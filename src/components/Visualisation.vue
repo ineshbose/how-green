@@ -1,7 +1,9 @@
 <template>
   <div>
     <b-jumbotron header="Graphs">
-      <b-button variant="dark" to="/">Home</b-button>
+      <b-button variant="dark" to="/"><b-icon icon="house-fill"></b-icon>Home</b-button> 
+      <b-button class="ml-2" variant="success" @click="$router.push({ name: 'product-page'} )">
+        <b-icon icon="arrow-left-square"></b-icon>Product Overview</b-button>
     </b-jumbotron>
     <b-container fluid v-if="product">
       <b-row>

@@ -1,8 +1,13 @@
 <template>
   <div>
     <h3>Alternative Products </h3>
-     <span v-if="$route.params.id == 'name'">Area - </span>
-          {{$this.product}}
+
+    <b-button class="ml-2" variant="success" @click="$router.push({ name: 'product-page'} )">
+        <b-icon icon="arrow-left-square"></b-icon>
+        Bachk to Product Overview
+      </b-button>
+
+    
 
      <div class="mt-4">
     <b-card img-src="https://placekitten.com/100/100" img-alt="Card image" img-left class="mb-3">
