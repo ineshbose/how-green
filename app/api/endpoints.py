@@ -15,11 +15,12 @@ PRODUCTS_CACHE = {"tesco": {}, "sainsbury": {}}
 
 
 def check_cache(func):
-    def execute(product_id, *args, **kwargs):
+    def execute(*args, **kwargs):
+        product_id = kwargs.get("product_id")
         return (
             PRODUCTS_CACHE["tesco"][product_id]
             if PRODUCTS_CACHE["tesco"].get(product_id)
-            else func()
+            else func(*args, **kwargs)
         )
 
     return execute
@@ -27,9 +28,8 @@ def check_cache(func):
 
 @api_rest.route("/tesco/<int:product_id>")
 class TescoProduct(Resource):
+    @check_cache
     def get(self, product_id):
-        if PRODUCTS_CACHE["tesco"].get(product_id):
-            return PRODUCTS_CACHE["tesco"][product_id]
 
         timestamp = datetime.utcnow().isoformat()
         json = {"timestamp": timestamp, "product": None}
@@ -119,16 +119,42 @@ class TescoProduct(Resource):
             score = random.randint(1, 100)
 
             origin_country = [
-                "South Africa",
-                "Australia",
-                "Italy",
-                "France",
-                "Spain",
-                "Germany",
-                "United States",
+                {
+                    "name": "South Africa",
+                    "tld": "za",
+                },
+                {
+                    "name": "Australia",
+                    "tld": "au",
+                },
+                {
+                    "name": "Italy",
+                    "tld": "it",
+                },
+                {
+                    "name": "France",
+                    "tld": "fr",
+                },
+                {
+                    "name": "Spain",
+                    "tld": "es",
+                },
+                {
+                    "name": "Germany",
+                    "tld": "de",
+                },
+                {
+                    "name": "United States",
+                    "tld": "us",
+                },
             ]
             origin_distance = [13736, 15182, 2641, 1600, 2483, 1643, 3321]
             origin_random = random.randint(0, len(origin_distance) - 1)
+
+            destination = {
+                "name": "United Kingdom",
+                "tld": "gb",
+            }
 
             c02_production = round(random.uniform(0.5, 40.5), 2)
 
@@ -149,7 +175,7 @@ class TescoProduct(Resource):
                 "price": product_price,
                 "score": score,
                 "origin": {"name": origin_country[origin_random]},
-                "destination": {"name": "Scotland"},
+                "destination": destination,
                 "distance": origin_distance[origin_random],
                 "fair_trade": fair_trade,
                 "co2": {
