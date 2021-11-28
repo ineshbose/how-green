@@ -1,6 +1,6 @@
 <div align="center">
     <p align="center">
-        <img alt="How Green logo" src="assets/logo.png" height="250px">
+        <img alt="How Green logo" src="assets/logo.svg" height="250px">
         <h3 align="center">How Green?</h3>
         <a href="https://how-green.herokuapp.com" target="_blank"><img alt="GitHub deployments" src="https://img.shields.io/github/deployments/ineshbose/how-green/how-green?style=flat-square"></a>
         <a href="https://github.com/ineshbose/how-green/actions/workflows/test-vue.yml" target="_blank"><img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/ineshbose/how-green/Test%20frontend?style=flat-square&label=frontend"></a>
