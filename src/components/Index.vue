@@ -5,11 +5,11 @@
     </b-card-title>
 
     <p>
-      We believe, consumers should have a right to know the effect their
-      products have on the environment.
+      We believe, consumers should have a right to know the effect the
+      products they buy have on the environment.
     </p>
     <p>
-      We created How Green so that you can find more sustainable options for
+      How Green was created so that you can find more sustainable options for
       your favourite products.
     </p>
     <p>
