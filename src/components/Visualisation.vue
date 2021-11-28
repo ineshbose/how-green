@@ -13,11 +13,32 @@
         <LineChart :chart-data="lineData"></LineChart>
       </b-row> -->
       <b-row>
-        <BarChart :chart-data="barData"></BarChart>
+        <b-col>
+          <BarChart :chart-data="barData"></BarChart>
+        </b-col>
+        <b-col>
+          <b-row>
+            <b-button size="sm" v-on:click="currentGraph = 'alternativeOne'">Alternative 1</b-button>
+            <b-button size="sm" v-on:click="currentGraph = 'alternativeTwo'">Alternative 2</b-button>
+            <b-button size="sm" v-on:click="currentGraph = 'alternativeThree'">Alternative 3</b-button>
+            <b-button size="sm" v-on:click="currentGraph = 'alternativeFour'">Alternative 4</b-button>
+          </b-row>
+          <b-row>
+            <div v-if="currentGraph=='alternativeOne'">
+              <RadarChart :chart-data="radarData1"></RadarChart>
+            </div>
+            <div v-if="currentGraph=='alternativeTwo'">
+              <RadarChart :chart-data="radarData2"></RadarChart>
+            </div>
+            <div v-if="currentGraph=='alternativeThree'">
+              <RadarChart :chart-data="radarData3"></RadarChart>
+            </div>
+            <div v-if="currentGraph=='alternativeFour'">
+              <RadarChart :chart-data="radarData4"></RadarChart>
+            </div>
+          </b-row>
+        </b-col>
       </b-row>
-      <!-- <b-row cols="3">
-        <RadarChart :chart-data="radarData"></RadarChart>
-      </b-row> -->
     </b-container>
     <b-spinner v-else variant="success" label="loading"></b-spinner>
   </div>
@@ -35,14 +56,16 @@ export default {
   components: {
     // LineChart,
     BarChart,
-    // RadarChart
+    RadarChart
   },
   data() {
     return {
       barData: {},
       lineData: {},
-      radarData: {},
+      radarData1: {},
+      radarData2: {},
       product: null,
+      currentGraph: "alternativeOne",
       info: "",
     }
   },
@@ -98,36 +121,126 @@ export default {
           }
         ]
       };
-      // this.radarData = {
-      //   labels: [
-      //     'Eating',
-      //     'Drinking',
-      //     'Sleeping',
-      //     'Designing',
-      //     'Coding'
-      //   ],
-      //   datasets: [{
-      //     label: 'This Product',
-      //     data: [65, 59, 90, 81, 56],
-      //     fill: true,
-      //     backgroundColor: 'rgba(255, 99, 132, 0.2)',
-      //     borderColor: 'rgb(255, 99, 132)',
-      //     pointBackgroundColor: 'rgb(255, 99, 132)',
-      //     pointBorderColor: '#fff',
-      //     pointHoverBackgroundColor: '#fff',
-      //     pointHoverBorderColor: 'rgb(255, 99, 132)'
-      //   }, {
-      //     label: 'Alternative Product',
-      //     data: [28, 48, 40, 19, 96],
-      //     fill: true,
-      //     backgroundColor: 'rgba(54, 162, 235, 0.2)',
-      //     borderColor: 'rgb(54, 162, 235)',
-      //     pointBackgroundColor: 'rgb(54, 162, 235)',
-      //     pointBorderColor: '#fff',
-      //     pointHoverBackgroundColor: '#fff',
-      //     pointHoverBorderColor: 'rgb(54, 162, 235)'
-      //   }]
-      // };
+      this.radarData1 = {
+        labels: [
+          'C02 Emitted in Production',
+          'C02 Emitted in Shipping',
+          'Energy Consumption in Production',
+          'Energy Consumption in Shipping',
+          'Waste'
+        ],
+        datasets: [{
+          label: this.product.name,
+          data: [this.product.co2.production, this.product.co2.shipping, this.product.energy.production, this.product.energy.shipping, this.product.waste],
+          fill: true,
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgb(255, 99, 132)',
+          pointBackgroundColor: 'rgb(255, 99, 132)',
+          pointBorderColor: '#fff',
+          pointHoverBackgroundColor: '#fff',
+          pointHoverBorderColor: 'rgb(255, 99, 132)'
+        }, {
+          label: this.product.alternatives[0].name,
+          data: [this.product.alternatives[0].co2.production, this.product.alternatives[0].co2.shipping, this.product.alternatives[0].energy.production, this.product.alternatives[0].energy.shipping, this.product.alternatives[0].waste],
+          fill: true,
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          borderColor: 'rgb(54, 162, 235)',
+          pointBackgroundColor: 'rgb(54, 162, 235)',
+          pointBorderColor: '#fff',
+          pointHoverBackgroundColor: '#fff',
+          pointHoverBorderColor: 'rgb(54, 162, 235)'
+        }]
+      };
+      this.radarData2 = {
+        labels: [
+          'C02 Emitted in Production',
+          'C02 Emitted in Shipping',
+          'Energy Consumption in Production',
+          'Energy Consumption in Shipping',
+          'Waste'
+        ],
+        datasets: [{
+          label: this.product.name,
+          data: [this.product.co2.production, this.product.co2.shipping, this.product.energy.production, this.product.energy.shipping, this.product.waste],
+          fill: true,
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgb(255, 99, 132)',
+          pointBackgroundColor: 'rgb(255, 99, 132)',
+          pointBorderColor: '#fff',
+          pointHoverBackgroundColor: '#fff',
+          pointHoverBorderColor: 'rgb(255, 99, 132)'
+        }, {
+          label: this.product.alternatives[1].name,
+          data: [this.product.alternatives[1].co2.production, this.product.alternatives[1].co2.shipping, this.product.alternatives[1].energy.production, this.product.alternatives[1].energy.shipping, this.product.alternatives[1].waste],
+          fill: true,
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          borderColor: 'rgb(54, 162, 235)',
+          pointBackgroundColor: 'rgb(54, 162, 235)',
+          pointBorderColor: '#fff',
+          pointHoverBackgroundColor: '#fff',
+          pointHoverBorderColor: 'rgb(54, 162, 235)'
+        }]
+      };
+      this.radarData3 = {
+        labels: [
+          'C02 Emitted in Production',
+          'C02 Emitted in Shipping',
+          'Energy Consumption in Production',
+          'Energy Consumption in Shipping',
+          'Waste'
+        ],
+        datasets: [{
+          label: this.product.name,
+          data: [this.product.co2.production, this.product.co2.shipping, this.product.energy.production, this.product.energy.shipping, this.product.waste],
+          fill: true,
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgb(255, 99, 132)',
+          pointBackgroundColor: 'rgb(255, 99, 132)',
+          pointBorderColor: '#fff',
+          pointHoverBackgroundColor: '#fff',
+          pointHoverBorderColor: 'rgb(255, 99, 132)'
+        }, {
+          label: this.product.alternatives[2].name,
+          data: [this.product.alternatives[2].co2.production, this.product.alternatives[2].co2.shipping, this.product.alternatives[2].energy.production, this.product.alternatives[2].energy.shipping, this.product.alternatives[2].waste],
+          fill: true,
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          borderColor: 'rgb(54, 162, 235)',
+          pointBackgroundColor: 'rgb(54, 162, 235)',
+          pointBorderColor: '#fff',
+          pointHoverBackgroundColor: '#fff',
+          pointHoverBorderColor: 'rgb(54, 162, 235)'
+        }]
+      };
+      this.radarData4 = {
+        labels: [
+          'C02 Emitted in Production',
+          'C02 Emitted in Shipping',
+          'Energy Consumption in Production',
+          'Energy Consumption in Shipping',
+          'Waste'
+        ],
+        datasets: [{
+          label: this.product.name,
+          data: [this.product.co2.production, this.product.co2.shipping, this.product.energy.production, this.product.energy.shipping, this.product.waste],
+          fill: true,
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgb(255, 99, 132)',
+          pointBackgroundColor: 'rgb(255, 99, 132)',
+          pointBorderColor: '#fff',
+          pointHoverBackgroundColor: '#fff',
+          pointHoverBorderColor: 'rgb(255, 99, 132)'
+        }, {
+          label: this.product.alternatives[3].name,
+          data: [this.product.alternatives[3].co2.production, this.product.alternatives[3].co2.shipping, this.product.alternatives[3].energy.production, this.product.alternatives[3].energy.shipping, this.product.alternatives[3].waste],
+          fill: true,
+          backgroundColor: 'rgba(54, 162, 235, 0.2)',
+          borderColor: 'rgb(54, 162, 235)',
+          pointBackgroundColor: 'rgb(54, 162, 235)',
+          pointBorderColor: '#fff',
+          pointHoverBackgroundColor: '#fff',
+          pointHoverBorderColor: 'rgb(54, 162, 235)'
+        }]
+      };
     },
     getRandomInt() {
       return Math.floor(Math.random() * (50 - 5 + 1)) + 5
