@@ -134,6 +134,16 @@ export default {
       this.radarData4 = this.getRadarData(3);
       this.radarData5 = this.getRadarData(4);
     },
+    getRandomBorderColor() {
+      const r = () => Math.floor(256 * Math.random());
+
+      return `rgba(${r()}, ${r()}, ${r()}, 0.5)`;
+    },
+    getRandomColor() {
+      const r = () => Math.floor(256 * Math.random());
+
+      return `rgb(${r()}, ${r()}, ${r()})`;
+    },
     getRandomInt() {
       return Math.floor(Math.random() * (50 - 5 + 1)) + 5
     },
@@ -145,23 +155,29 @@ export default {
             label: dataLabel + " - Product vs Alternatives" ,
             data: [this.product[key1][key2]].concat(this.product.alternatives.map((alternative) => (alternative[key1][key2]))), //[this.product.co2.shipping, this.product.alternatives[0].co2.shipping, this.product.alternatives[1].co2.shipping, this.product.alternatives[2].co2.shipping, this.product.alternatives[3].co2.shipping, this.product.alternatives[4].co2.shipping],
             backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(255, 159, 64, 0.2)',
-              'rgba(255, 205, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(201, 203, 207, 0.2)'
-            ],
+              'rgba(255, 99, 132, 0.2)'
+            ].concat(this.product.alternatives.map(() => (this.getRandomBorderColor()))),
             borderColor: [
-              'rgb(255, 99, 132)',
-              'rgb(255, 159, 64)',
-              'rgb(255, 205, 86)',
-              'rgb(75, 192, 192)',
-              'rgb(54, 162, 235)',
-              'rgb(153, 102, 255)',
-              'rgb(201, 203, 207)'
-            ],
+              'rgb(255, 99, 132)'
+            ].concat(this.product.alternatives.map(() => (this.getRandomColor()))),
+            // backgroundColor: [
+            //   'rgba(255, 99, 132, 0.2)',
+            //   'rgba(255, 159, 64, 0.2)',
+            //   'rgba(255, 205, 86, 0.2)',
+            //   'rgba(75, 192, 192, 0.2)',
+            //   'rgba(54, 162, 235, 0.2)',
+            //   'rgba(153, 102, 255, 0.2)',
+            //   'rgba(201, 203, 207, 0.2)'
+            // ],
+            // borderColor: [
+            //   'rgb(255, 99, 132)',
+            //   'rgb(255, 159, 64)',
+            //   'rgb(255, 205, 86)',
+            //   'rgb(75, 192, 192)',
+            //   'rgb(54, 162, 235)',
+            //   'rgb(153, 102, 255)',
+            //   'rgb(201, 203, 207)'
+            // ],
             borderWidth: 1
           }
         ]
