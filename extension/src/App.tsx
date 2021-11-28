@@ -260,7 +260,7 @@ export default class App extends React.Component<{}, any> {
                             variant="link"
                             className="float-end p-0"
                           >
-                            In the Score?
+                            Learn more
                           </Button>
                         </Tab.Pane>
 
