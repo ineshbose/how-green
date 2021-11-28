@@ -95,6 +95,12 @@ class TescoProduct(Resource):
                     if str(alt_id) == str(product_id):
                         continue
 
+                    energy = {
+                        "production": round(random.uniform(0.5, 40.5), 2),
+                        "shipping": round(random.uniform(0.5, 40.5), 2),
+                    }
+
+                    waste = {"waste": round(random.uniform(0.5, 40.5), 2)}
                     r_score, co2 = (
                         (
                             PRODUCTS_CACHE["tesco"][alt_id]["score"],
@@ -117,6 +123,8 @@ class TescoProduct(Resource):
                             "img": alternative_images[i]["src"],
                             "score": r_score,
                             "co2": co2,
+                            "energy": energy,
+                            "waste": waste,
                         }
                     )
 
@@ -167,6 +175,8 @@ class TescoProduct(Resource):
             energy_consumption_prod = round(random.uniform(0.5, 40.5), 2)
             energy_consumption_ship = round(random.uniform(0.5, 40.5), 2)
 
+            waste = round(random.uniform(0.5, 40.5), 2)
+
             fair_trade = bool(random.getrandbits(1))
 
             json = {
@@ -181,6 +191,7 @@ class TescoProduct(Resource):
                 "destination": destination,
                 "distance": origin_distance[origin_random],
                 "fair_trade": fair_trade,
+                "waste": {"waste": waste},
                 "co2": {
                     "production": c02_production,
                     "shipping": c02_shipping,
