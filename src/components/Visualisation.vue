@@ -122,11 +122,11 @@ export default {
       //     },
       //   ],
       // };
-      this.barData1 = this.getBarData("co2", "shipping");
-      this.barData2 = this.getBarData("co2", "production");
-      this.barData3 = this.getBarData("energy", "shipping");
-      this.barData4 = this.getBarData("energy", "production");
-      this.barData5 = this.getBarData("waste", "waste");
+      this.barData1 = this.getBarData("co2", "shipping", "C02 Emissions during Shipping");
+      this.barData2 = this.getBarData("co2", "production", "C02 Emissions during Production");
+      this.barData3 = this.getBarData("energy", "shipping", "Energy Consumption during Shipping");
+      this.barData4 = this.getBarData("energy", "production", "Energy Consumption during Production");
+      this.barData5 = this.getBarData("waste", "waste", "Waste Produced");
 
       this.radarData1 = this.getRadarData(0);
       this.radarData2 = this.getRadarData(1);
@@ -137,12 +137,12 @@ export default {
     getRandomInt() {
       return Math.floor(Math.random() * (50 - 5 + 1)) + 5
     },
-    getBarData(key1, key2){
+    getBarData(key1, key2, dataLabel){
       return {
         labels: [this.product.name].concat(this.product.alternatives.map((alternative) => (alternative.name))), // [this.product.name, this.product.alternatives[0].name, this.product.alternatives[1].name, this.product.alternatives[2].name, this.product.alternatives[3].name, this.product.alternatives[4].name],
         datasets: [
           {
-            label: "C02 Emission - Product vs Alternatives" ,
+            label: dataLabel + " - Product vs Alternatives" ,
             data: [this.product[key1][key2]].concat(this.product.alternatives.map((alternative) => (alternative[key1][key2]))), //[this.product.co2.shipping, this.product.alternatives[0].co2.shipping, this.product.alternatives[1].co2.shipping, this.product.alternatives[2].co2.shipping, this.product.alternatives[3].co2.shipping, this.product.alternatives[4].co2.shipping],
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
