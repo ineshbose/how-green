@@ -16,8 +16,9 @@ import {
   Container,
   Row,
   Col,
+  InputGroup,
+  Form,
 } from "react-bootstrap";
-// import divWithClassName from "react-bootstrap/divWithClassName";
 import logo from "./logo.svg";
 import "./App.css";
 
@@ -60,7 +61,11 @@ export default class App extends React.Component<{}, any> {
 
   constructor(props: any) {
     super(props);
-    this.state = { product: null, loading: true };
+    this.state = {
+      product: null,
+      loading: true,
+      searchQuery: "",
+    };
   }
 
   componentDidMount() {
@@ -101,12 +106,16 @@ export default class App extends React.Component<{}, any> {
     );
   }
 
+  getSearch(query: any) {
+    this.setState({ searchQuery: query });
+  }
+
   goToPage(link: string) {
     chrome.tabs.create({ url: link });
   }
 
   render() {
-    const { product, loading } = this.state;
+    const { product, loading, searchQuery } = this.state;
 
     return (
       <div
@@ -117,6 +126,7 @@ export default class App extends React.Component<{}, any> {
         }}
       >
         <Navbar bg="transparent">
+          {searchQuery}
           <Container>
             <Navbar.Brand
               className="text-white"
@@ -133,6 +143,7 @@ export default class App extends React.Component<{}, any> {
             </Navbar.Brand>
           </Container>
         </Navbar>
+
         <div className="p-4">
           {
             (loading
@@ -157,6 +168,7 @@ export default class App extends React.Component<{}, any> {
                     <Image src={product.img} fluid rounded />
                     </Col>
                   }
+
                   <Col className="h3">
                     {product.name}
                   </Col>
@@ -172,15 +184,18 @@ export default class App extends React.Component<{}, any> {
                         <Nav.Item>
                           <Nav.Link eventKey="score">Score</Nav.Link>
                         </Nav.Item>
+
                         <Nav.Item>
                           <Nav.Link eventKey="alternatives">Alternatives</Nav.Link>
                         </Nav.Item>
                       </Nav>
                     </Card.Header>
+
                     <Card.Body>
                       <Tab.Content>
                         <Tab.Pane eventKey="score">
                           <h1>{product.score}%</h1>
+
                           {/* <Row>
                             {product.origin && <Col>
                               Origin
@@ -204,42 +219,46 @@ export default class App extends React.Component<{}, any> {
                             </Col>}
                           </Row> */}
 
-                          CO2
-                          <ProgressBar>
+                          <div className="py-2">
+                            <h6>CO2</h6>
+
                             <ProgressBar
                               now={product.co2.production}
                               max={40.5}
                               label={`Production: ${product.co2.production}`}
                               variant={this.getVariant((product.co2.production*100/40.5), true)}
                             />
+
                             <ProgressBar
                               now={product.co2.shipping}
                               max={40.5}
                               label={`Shipping: ${product.co2.shipping}`}
                               variant={this.getVariant((product.co2.shipping*100/40.5), true)}
                             />
-                          </ProgressBar>
+                          </div>
 
-                          Energy
-                          <ProgressBar>
+                          <div className="py-2">
+                            <h6>Energy</h6>
+
                             <ProgressBar
                               now={product.energy.production}
                               max={40.5}
                               label={`Production: ${product.energy.production}`}
                               variant={this.getVariant((product.energy.production*100/40.5), true)}
                             />
+
                             <ProgressBar
                               now={product.energy.shipping}
                               max={40.5}
                               label={`Shipping: ${product.energy.shipping}`}
                               variant={this.getVariant((product.energy.shipping*100/40.5), true)}
                             />
-                          </ProgressBar>
+                          </div>
 
                           <Button
                             onClick={() => this.goToPage(`http://localhost:8080/product/tesco/${product.id}`)}
                             variant="link"
-                            className="float-end"
+                            className="float-end p-0"
                           >
                             In the Score?
                           </Button>
@@ -248,7 +267,7 @@ export default class App extends React.Component<{}, any> {
                         <Tab.Pane eventKey="alternatives">
                           <ListGroup>
                             {
-                              product.alternatives.map((alternative: Alternative) => (
+                              product.alternatives.slice(0, 5).map((alternative: Alternative) => (
                                 <ListGroup.Item
                                   action
                                   onClick={() => this.goToPage(`https://www.tesco.com/groceries/en-GB/products/${alternative.id}`)}
@@ -259,11 +278,20 @@ export default class App extends React.Component<{}, any> {
                                     {alternative.img && <Image src={alternative.img} fluid rounded />}
                                     {alternative.name}
                                   </div>
+
                                   <Badge bg={this.getVariant(alternative.score as number, false)}>{alternative.score}%</Badge>
                                 </ListGroup.Item>
                               ))
                             }
                           </ListGroup>
+
+                          <Button
+                            onClick={() => this.goToPage(`http://localhost:8080/product/tesco/${product.id}/alternatives`)}
+                            variant="link"
+                            className="float-end p-0"
+                          >
+                            View more
+                          </Button>
                         </Tab.Pane>
                       </Tab.Content>
                     </Card.Body>
@@ -272,28 +300,45 @@ export default class App extends React.Component<{}, any> {
               </>
                 )
               : (
-              <>
-                <Container>
-                <Row>
-                  <Col>
-                    Visit our homepage or shop at Tesco now!
-                  </Col>
-                </Row>
-                <Card.Text>{"\n"}</Card.Text>
-                <Row className="justify-content-md-center">
-                  <Col>
-                  <ButtonToolbar aria-label="Toolbar with button groups">
-                    <ButtonGroup className="me-5">
-                          <Button onClick={() => this.goToPage('http://localhost:8080/')}>Home</Button>
-                    </ButtonGroup>
-                    <ButtonGroup className="float-end">
-                          <Button className="float-end" onClick={() => this.goToPage('https://tesco.com/')}>Tesco</Button>
-                    </ButtonGroup>
-                  </ButtonToolbar>
-                  </Col>
-                </Row>
-                </Container>
-              </>
+              <div className="text-center mb-4">
+                <h2>Shop greener!</h2>
+
+                <h6>Visit our homepage or shop at Tesco.</h6>
+
+                {/* <ButtonToolbar> */}
+                  <ButtonGroup className="pt-2">
+                    <Button
+                      variant="outline-light"
+                      onClick={() => this.goToPage('http://localhost:8080/')}
+                    >
+                      Home
+                    </Button>
+                    <Button
+                      variant="outline-light"
+                      onClick={() => this.goToPage('https://tesco.com/')}
+                    >
+                      Tesco
+                    </Button>
+                  </ButtonGroup>
+
+                  {/* <InputGroup>
+                    <Form.Control
+                      type="text"
+                      placeholder="Search Tesco"
+                      aria-label="Search Tesco"
+                      value={searchQuery}
+                      onChange={this.getSearch}
+                    />
+
+                    <Button
+                      variant="primary"
+                      onClick={() => this.goToPage(`https://www.tesco.com/groceries/en-GB/search?query=${searchQuery}`)}
+                    >
+                      Go
+                    </Button>
+                  </InputGroup>
+                </ButtonToolbar> */}
+              </div>
               )
             )
           )}
