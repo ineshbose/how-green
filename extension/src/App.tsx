@@ -1,23 +1,28 @@
 import * as React from "react";
-import Spinner from "react-bootstrap/Spinner";
-import Badge from "react-bootstrap/Badge";
-import Image from "react-bootstrap/Image";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Navbar from "react-bootstrap/Navbar";
-import Button from "react-bootstrap/Button";
-import ProgressBar from "react-bootstrap/ProgressBar";
-import Card from "react-bootstrap/Card";
-import divWithClassName from "react-bootstrap/divWithClassName";
-import Tabs from "react-bootstrap/Tabs";
-import Tab from "react-bootstrap/Tab";
-import ListGroup from "react-bootstrap/ListGroup";
+import {
+  Spinner,
+  Placeholder,
+  Badge,
+  Card,
+  Image,
+  Nav,
+  Navbar,
+  Button,
+  ButtonGroup,
+  ProgressBar,
+  Tab,
+  ListGroup,
+  Container,
+  Row,
+  Col,
+} from "react-bootstrap";
+// import divWithClassName from "react-bootstrap/divWithClassName";
 import logo from "./logo.svg";
 import "./App.css";
-import { Container } from "react-bootstrap";
 
 interface Place {
   name: string;
+  tld?: string;
 }
 
 interface Impact {
@@ -54,10 +59,11 @@ export default class App extends React.Component<{}, any> {
 
   constructor(props: any) {
     super(props);
-    this.state = {product: null};
+    this.state = { product: null, loading: true };
   }
 
   componentDidMount() {
+    this.setState({ loading: true });
     this.getProduct();
   }
 
@@ -65,9 +71,33 @@ export default class App extends React.Component<{}, any> {
     chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
       const activeTab = tabs[0];
       if (activeTab.url && activeTab.url.includes("tesco.com")) {
-        fetch(`http://localhost:5000/api/tesco/${activeTab.url.split("?")[0].split("/").pop()}`).then(resp => resp.json()).then((product) => this.setState({ product: product }));
+        fetch(`http://localhost:5000/api/tesco/${activeTab.url.split("?")[0].split("/").pop()}`).then(resp => resp.json()).then((product: Product) => this.setState({ product: product }));
       }
+
+      this.setState({ loading: false });
    });
+  }
+
+  getVariant(percent: number, inverse: boolean) {
+    return !inverse
+    ? (
+      percent > 80
+        ? "success"
+        : percent > 60
+          ? "info"
+          : percent > 40
+            ? "warning"
+              : "danger"
+    )
+    : (
+      percent > 80
+        ? "danger"
+        : percent > 60
+          ? "warning"
+          : percent > 40
+            ? "info"
+              : "success"
+    );
   }
 
   goToPage(link: string) {
@@ -75,73 +105,184 @@ export default class App extends React.Component<{}, any> {
   }
 
   render() {
-    const { product } = this.state;
+    const { product, loading } = this.state;
 
     return (
-      <Navbar style={{ backgroundColor: '#0DD98F' }}>
-        <Container>
-          <Navbar.Brand onClick={() => this.goToPage('')}>
-            <img
-              alt=""
-              src={logo}
-              width="30"
-              height="30"
-              className="d-inline-block align-top"
-            />{' '}
-            How Green?
-          </Navbar.Brand>
-        </Container>
-      </Navbar>
-    )
+      <div
+        style={{
+          background: "linear-gradient(145deg, #00D98F, #198754)",
+          color: "white",
+          width: "20rem",
+        }}
+      >
+        <Navbar bg="transparent">
+          <Container>
+            <Navbar.Brand
+              className="text-white"
+              onClick={() => this.goToPage('http://localhost:8080/')}
+            >
+              <img
+                alt=""
+                src={logo}
+                width="30"
+                height="30"
+                className="d-inline-block align-top"
+              />{' '}
+              How Green?
+            </Navbar.Brand>
+          </Container>
+        </Navbar>
+        <div className="p-4">
+          {
+            (loading
+            ? (
+            <>
+              <Spinner animation="border" role="status" className="mb-4 mx-auto">
+                <span className="visually-hidden">Loading..</span>
+              </Spinner>
 
-    return (
-      <Card text="white" style={{ width: '20rem', backgroundColor:'#0DD98F' }}>
-        {
-          (!product
-          ? (
-          <Spinner animation="border" role="status" className="m-4 mx-auto">
-            <span className="visually-hidden">Loading...</span>
-          </Spinner>
-            )
-          : (
-          <>
-            <Tabs defaultActiveKey="score" className="mb-3 nav-fill">
-              <Tab eventKey="score" title="Score">
-                <Card.Body>
-                  <Card.Title as={divWithClassName('h3')}>
+              <Placeholder as="p" animation="wave">
+                <Placeholder xs={6} />
+              </Placeholder>
+
+              <Placeholder.Button xs={4} aria-hidden="true" />
+            </>
+              )
+            : (product
+              ? (
+              <>
+                <Row className="mb-2">
+                  {product.img && <Col xs={3}>
+                    <Image src={product.img} fluid rounded />
+                    </Col>
+                  }
+                  <Col className="h3">
                     {product.name}
-                    <ProgressBar now={product.score} label={`${product.score}%`} />
-                    <Badge bg="light" text="dark" as={divWithClassName('h1 d-block my-2')}>{product.score}%</Badge>
-                  </Card.Title>
-                  <Button onClick={() => this.goToPage(`http://localhost:8080/product/tesco/${product.id}`)} variant="primary">In the Score?</Button>
-                </Card.Body>
-              </Tab>
-              <Tab eventKey="alternatives" title="Alternatives">
-                <Card.Body>
-                  <ListGroup>
-                    {
-                      product.alternatives.map((alternative: Alternative) => (
-                        <ListGroup.Item action onClick={() => this.goToPage(`https://www.tesco.com/groceries/en-GB/products/${alternative.id}`)}>
-                          {alternative.name} <Badge bg="info">{alternative.score}%</Badge>
-                        </ListGroup.Item>
-                      ))
-                    }
-                  </ListGroup>
-                </Card.Body>
-              </Tab>
-            </Tabs>
-        </>
-          )
-        )}
-        <Row>
-          <Col />
-          <Col xs={1}>
-            <Button variant="link" onClick={() => this.goToPage("http://localhost:8080/")} className="w-25 float-end">
-              <Image style={{ height: "2.5rem" }} src={logo} roundedCircle fluid alt="How Green Logo" />
-            </Button>
-          </Col>
-        </Row>
-      </Card>
+                  </Col>
+                </Row>
+
+                <Tab.Container defaultActiveKey="score">
+                  <Card
+                    border="success"
+                    className="text-black"
+                  >
+                    <Card.Header>
+                      <Nav variant="tabs" fill>
+                        <Nav.Item>
+                          <Nav.Link eventKey="score">Score</Nav.Link>
+                        </Nav.Item>
+                        <Nav.Item>
+                          <Nav.Link eventKey="alternatives">Alternatives</Nav.Link>
+                        </Nav.Item>
+                      </Nav>
+                    </Card.Header>
+                    <Card.Body>
+                      <Tab.Content>
+                        <Tab.Pane eventKey="score">
+                          <h1>{product.score}%</h1>
+                          {/* <Row>
+                            {product.origin && <Col>
+                              Origin
+                              {product.origin.tld && <img
+                                alt={`${product.origin.name} flag`}
+                                src={`https://img.geonames.org/flags/m/${product.origin.tld}.png`}
+                                height="30"
+                                className="d-inline-block align-top"
+                              />}
+                              {product.origin.name}
+                            </Col>}
+                            {product.destination && <Col>
+                              Destination
+                              {product.destination.tld && <img
+                                alt={`${product.destination.name} flag`}
+                                src={`https://img.geonames.org/flags/m/${product.destination.tld}.png`}
+                                height="30"
+                                className="d-inline-block align-top"
+                              />}
+                              {product.destination.name}
+                            </Col>}
+                          </Row> */}
+
+                          CO2
+                          <ProgressBar>
+                            <ProgressBar
+                              now={product.co2.production}
+                              max={40.5}
+                              label={`Production: ${product.co2.production}`}
+                              variant={this.getVariant((product.co2.production*100/40.5), true)}
+                            />
+                            <ProgressBar
+                              now={product.co2.shipping}
+                              max={40.5}
+                              label={`Shipping: ${product.co2.shipping}`}
+                              variant={this.getVariant((product.co2.shipping*100/40.5), true)}
+                            />
+                          </ProgressBar>
+
+                          Energy
+                          <ProgressBar>
+                            <ProgressBar
+                              now={product.energy.production}
+                              max={40.5}
+                              label={`Production: ${product.energy.production}`}
+                              variant={this.getVariant((product.energy.production*100/40.5), true)}
+                            />
+                            <ProgressBar
+                              now={product.energy.shipping}
+                              max={40.5}
+                              label={`Shipping: ${product.energy.shipping}`}
+                              variant={this.getVariant((product.energy.shipping*100/40.5), true)}
+                            />
+                          </ProgressBar>
+
+                          <Button
+                            onClick={() => this.goToPage(`http://localhost:8080/product/tesco/${product.id}`)}
+                            variant="link"
+                            className="float-end"
+                          >
+                            In the Score?
+                          </Button>
+                        </Tab.Pane>
+
+                        <Tab.Pane eventKey="alternatives">
+                          <ListGroup>
+                            {
+                              product.alternatives.map((alternative: Alternative) => (
+                                <ListGroup.Item
+                                  action
+                                  onClick={() => this.goToPage(`https://www.tesco.com/groceries/en-GB/products/${alternative.id}`)}
+                                  className="d-flex justify-content-between align-items-start"
+                                  variant={this.getVariant(alternative.score as number, false)}
+                                >
+                                  <div className="ms-2 me-auto fw-bold">
+                                    {alternative.img && <Image src={alternative.img} fluid rounded />}
+                                    {alternative.name}
+                                  </div>
+                                  <Badge bg={this.getVariant(alternative.score as number, false)}>{alternative.score}%</Badge>
+                                </ListGroup.Item>
+                              ))
+                            }
+                          </ListGroup>
+                        </Tab.Pane>
+                      </Tab.Content>
+                    </Card.Body>
+                  </Card>
+                </Tab.Container>
+              </>
+                )
+              : (
+              <>
+                Visit Tesco to see details!
+                <ButtonGroup vertical>
+                  <Button onClick={() => this.goToPage('http://localhost:8080/')}>Home</Button>
+                  <Button onClick={() => this.goToPage('https://tesco.com/')}>Tesco</Button>
+                </ButtonGroup>
+              </>
+              )
+            )
+          )}
+        </div>
+      </div>
     );
   }
 };

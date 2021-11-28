@@ -15,11 +15,12 @@ PRODUCTS_CACHE = {"tesco": {}, "sainsbury": {}}
 
 
 def check_cache(func):
-    def execute(product_id, *args, **kwargs):
+    def execute(*args, **kwargs):
+        product_id = kwargs.get("product_id")
         return (
             PRODUCTS_CACHE["tesco"][product_id]
             if PRODUCTS_CACHE["tesco"].get(product_id)
-            else func()
+            else func(*args, **kwargs)
         )
 
     return execute
@@ -27,9 +28,8 @@ def check_cache(func):
 
 @api_rest.route("/tesco/<int:product_id>")
 class TescoProduct(Resource):
+    @check_cache
     def get(self, product_id):
-        if PRODUCTS_CACHE["tesco"].get(product_id):
-            return PRODUCTS_CACHE["tesco"][product_id]
 
         timestamp = datetime.utcnow().isoformat()
         json = {"timestamp": timestamp, "product": None}
@@ -53,15 +53,15 @@ class TescoProduct(Resource):
             product_name = soup.find("title").get_text().split(" - ")[0]
 
             # Find the product image
-            product_image = soup.find(class_="product-image product-image-visible").get(
-                "src"
-            )
+            product_image = soup.find(class_="product-image product-image-visible")
+            product_image = product_image.get("src") if product_image else None
 
             # Create product description from descriptors
             product_description = " ".join(d.get_text() for d in descriptors)
 
             # Find the product price
-            product_price = soup.find(class_="price-per-sellable-unit").get_text()
+            product_price = soup.find(class_="price-per-sellable-unit")
+            product_price = product_price.get_text() if product_price else 0
 
             # Find 5 alternatives for the relevant category
             alternative_products = []
@@ -70,7 +70,9 @@ class TescoProduct(Resource):
             alternatives_category = soup.find_all(
                 class_="styled__Anchor-sc-1xizymv-0 qbbMw beans-breadcrumb__list-item-link beans-link__anchor"
             )
-            alt_cat_link = alternatives_category[-2]["href"]
+            alt_cat_link = (
+                alternatives_category[-2]["href"] if alternatives_category else ""
+            )
 
             # Make a new request to the product category and retrieve alternatives
             alt_url = f"https://www.tesco.com{alt_cat_link}"
@@ -119,16 +121,42 @@ class TescoProduct(Resource):
             score = random.randint(1, 100)
 
             origin_country = [
-                "South Africa",
-                "Australia",
-                "Italy",
-                "France",
-                "Spain",
-                "Germany",
-                "United States",
+                {
+                    "name": "South Africa",
+                    "tld": "za",
+                },
+                {
+                    "name": "Australia",
+                    "tld": "au",
+                },
+                {
+                    "name": "Italy",
+                    "tld": "it",
+                },
+                {
+                    "name": "France",
+                    "tld": "fr",
+                },
+                {
+                    "name": "Spain",
+                    "tld": "es",
+                },
+                {
+                    "name": "Germany",
+                    "tld": "de",
+                },
+                {
+                    "name": "United States",
+                    "tld": "us",
+                },
             ]
             origin_distance = [13736, 15182, 2641, 1600, 2483, 1643, 3321]
             origin_random = random.randint(0, len(origin_distance) - 1)
+
+            destination = {
+                "name": "United Kingdom",
+                "tld": "gb",
+            }
 
             c02_production = round(random.uniform(0.5, 40.5), 2)
 
@@ -149,7 +177,7 @@ class TescoProduct(Resource):
                 "price": product_price,
                 "score": score,
                 "origin": {"name": origin_country[origin_random]},
-                "destination": {"name": "Scotland"},
+                "destination": destination,
                 "distance": origin_distance[origin_random],
                 "fair_trade": fair_trade,
                 "co2": {
