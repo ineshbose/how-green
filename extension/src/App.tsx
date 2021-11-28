@@ -9,6 +9,7 @@ import {
   Navbar,
   Button,
   ButtonGroup,
+  ButtonToolbar,
   ProgressBar,
   Tab,
   ListGroup,
@@ -272,11 +273,26 @@ export default class App extends React.Component<{}, any> {
                 )
               : (
               <>
-                Visit Tesco to see details!
-                <ButtonGroup vertical>
-                  <Button onClick={() => this.goToPage('http://localhost:8080/')}>Home</Button>
-                  <Button onClick={() => this.goToPage('https://tesco.com/')}>Tesco</Button>
-                </ButtonGroup>
+                <Container>
+                <Row>
+                  <Col>
+                    Visit our homepage or shop at Tesco now!
+                  </Col>
+                </Row>
+                <Card.Text>{"\n"}</Card.Text>
+                <Row className="justify-content-md-center">
+                  <Col>
+                  <ButtonToolbar aria-label="Toolbar with button groups">
+                    <ButtonGroup className="me-5">
+                          <Button onClick={() => this.goToPage('http://localhost:8080/')}>Home</Button>
+                    </ButtonGroup>
+                    <ButtonGroup className="float-end">
+                          <Button className="float-end" onClick={() => this.goToPage('https://tesco.com/')}>Tesco</Button>
+                    </ButtonGroup>
+                  </ButtonToolbar>
+                  </Col>
+                </Row>
+                </Container>
               </>
               )
             )
