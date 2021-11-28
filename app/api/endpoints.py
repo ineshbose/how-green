@@ -53,15 +53,15 @@ class TescoProduct(Resource):
             product_name = soup.find("title").get_text().split(" - ")[0]
 
             # Find the product image
-            product_image = soup.find(class_="product-image product-image-visible").get(
-                "src"
-            )
+            product_image = soup.find(class_="product-image product-image-visible")
+            product_image = product_image.get("src") if product_image else None
 
             # Create product description from descriptors
             product_description = " ".join(d.get_text() for d in descriptors)
 
             # Find the product price
-            product_price = soup.find(class_="price-per-sellable-unit").get_text()
+            product_price = soup.find(class_="price-per-sellable-unit")
+            product_price = product_price.get_text() if product_price else 0
 
             # Find 5 alternatives for the relevant category
             alternative_products = []
@@ -70,7 +70,9 @@ class TescoProduct(Resource):
             alternatives_category = soup.find_all(
                 class_="styled__Anchor-sc-1xizymv-0 qbbMw beans-breadcrumb__list-item-link beans-link__anchor"
             )
-            alt_cat_link = alternatives_category[-2]["href"]
+            alt_cat_link = (
+                alternatives_category[-2]["href"] if alternatives_category else ""
+            )
 
             # Make a new request to the product category and retrieve alternatives
             alt_url = f"https://www.tesco.com{alt_cat_link}"
