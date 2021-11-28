@@ -1,8 +1,6 @@
 import random
 import requests
 from datetime import datetime
-
-from flask import request
 from bs4 import BeautifulSoup
 
 # http://flask-restplus.readthedocs.io
@@ -32,7 +30,7 @@ class TescoProduct(Resource):
     def get(self, product_id):
 
         timestamp = datetime.utcnow().isoformat()
-        json = {"timestamp": timestamp, "product": None}
+        json = {"timestamp": timestamp, "id": product_id, "name": None}
 
         # Headers so we don't get blocked by tesco
         headers = {
@@ -63,7 +61,7 @@ class TescoProduct(Resource):
             product_price = soup.find(class_="price-per-sellable-unit")
             product_price = product_price.get_text() if product_price else 0
 
-            # Find 5 alternatives for the relevant category
+            # Find alternatives for the relevant category
             alternative_products = []
 
             # Find the product category
@@ -90,30 +88,35 @@ class TescoProduct(Resource):
                 alternative_images = alt_soup.find_all(
                     "img", {"class": "product-image"}
                 )
-                for i in range(5):
+                for i in range(len(alternative_names)):
                     r_score = 0
+                    alt_id = alternative_links[i]["href"].split("/")[-1]
 
-                    # If the alternative product already exists in our product catalogue, grab the score
-                    if PRODUCTS_CACHE["tesco"].get(
-                        alternative_links[i]["href"].split("/")[-1]
-                    ):
-                        r_score = PRODUCTS_CACHE[
-                            "tesco"[alternative_links[i]["href"].split("/")[-1]]
-                        ]["score"]
-                    else:
-                        r_score = random.randint(1, 100)
-                        c02_production = round(random.uniform(0.5, 40.5), 2)
-                        c02_shipping = round(random.uniform(0.5, 40.5), 2)
+                    if str(alt_id) == str(product_id):
+                        continue
+
+                    r_score, co2 = (
+                        (
+                            PRODUCTS_CACHE["tesco"][alt_id]["score"],
+                            PRODUCTS_CACHE["tesco"][alt_id]["co2"],
+                        )
+                        if PRODUCTS_CACHE["tesco"].get(alt_id)
+                        else (
+                            random.randint(1, 100),
+                            {
+                                "production": round(random.uniform(0.5, 40.5), 2),
+                                "shipping": round(random.uniform(0.5, 40.5), 2),
+                            },
+                        )
+                    )
+
                     alternative_products.append(
                         {
-                            "id": alternative_links[i]["href"].split("/")[-1],
+                            "id": alt_id,
                             "name": alternative_names[i].get_text(),
                             "img": alternative_images[i]["src"],
                             "score": r_score,
-                            "co2": {
-                                "production": c02_production,
-                                "shipping": c02_shipping,
-                            },
+                            "co2": co2,
                         }
                     )
 
@@ -159,11 +162,9 @@ class TescoProduct(Resource):
             }
 
             c02_production = round(random.uniform(0.5, 40.5), 2)
-
             c02_shipping = round(random.uniform(0.5, 40.5), 2)
 
             energy_consumption_prod = round(random.uniform(0.5, 40.5), 2)
-
             energy_consumption_ship = round(random.uniform(0.5, 40.5), 2)
 
             fair_trade = bool(random.getrandbits(1))
@@ -193,7 +194,3 @@ class TescoProduct(Resource):
 
         PRODUCTS_CACHE["tesco"][product_id] = json
         return json
-
-    def post(self, product_id):
-        json_payload = request.json
-        return {"timestamp": json_payload}, 201

@@ -12,31 +12,54 @@
             <b-card-img-lazy :src="product.img" fluid rounded></b-card-img-lazy>
           </b-col>
           <b-col>
-            <b-card-title>{{ product.name }}</b-card-title>
+            <b-card-title>
+              {{ product.name }}
+            </b-card-title>
           </b-col>
         </b-row>
-        Product rating: {{ product.score }}% <br />
-        Grade : {{ grade }} <br />
-        {{ advice }} <br />
-        If you would like to see a break down of figures that create the rating
-        they can be viewed in graphs.
 
-        <b-button
-          class="ml-2"
-          variant="success"
-          @click="$router.push({ name: 'product-alt' })"
-        >
-          <b-icon icon="info-circle"></b-icon>
-          Alternative Products
-        </b-button>
-        <b-button
-          class="ml-2"
-          variant="success"
-          @click="$router.push({ name: 'product-vis' })"
-        >
-          <b-icon icon="graph-up"></b-icon>
-          View Graphs
-        </b-button>
+        <b-row class="py-4 text-center">
+          <b-col>
+            <b-card-sub-title> Product rating </b-card-sub-title>
+            <b-card-title> {{ product.score }}% </b-card-title>
+          </b-col>
+          <b-col>
+            <b-card-sub-title> Grade </b-card-sub-title>
+            <b-card-title>
+              {{ grade }}
+            </b-card-title>
+          </b-col>
+        </b-row>
+
+        <b-alert show :variant="this.variant">
+          {{ advice }}
+        </b-alert>
+
+        <!-- <b-row>
+          If you would like to see a break down of figures that create the rating
+          they can be viewed in graphs.
+        </b-row> -->
+
+        <b-row class="text-center py-2" no-gutters>
+          <b-col md>
+            <b-button
+              variant="outline-info"
+              @click="$router.push({ name: 'product-vis' })"
+            >
+              <b-icon icon="graph-up"></b-icon>
+              View Graphs
+            </b-button>
+          </b-col>
+          <b-col md>
+            <b-button
+              variant="outline-primary"
+              @click="$router.push({ name: 'product-alt' })"
+            >
+              <b-icon icon="info-circle"></b-icon>
+              View Alternatives
+            </b-button>
+          </b-col>
+        </b-row>
       </b-card-body>
       <b-card-body class="text-center m-5" v-else>
         <b-skeleton></b-skeleton>
@@ -103,6 +126,24 @@ export default {
           break;
       }
       return scoreAdvice;
+    },
+    variant() {
+      var scoreVariant = "";
+      switch (this.grade) {
+        case "A":
+          scoreVariant = "success";
+          break;
+        case "B":
+          scoreVariant = "info";
+          break;
+        case "C":
+          scoreVariant = "warning";
+          break;
+        case "D":
+          scoreVariant = "danger";
+          break;
+      }
+      return scoreVariant;
     },
   },
   methods: {},

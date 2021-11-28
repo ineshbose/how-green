@@ -1,26 +1,46 @@
 <template>
-  <div>
-    <b-jumbotron header=" Why should you use How Green?" header-level="5">
-      <template #lead>
-        We believe, consumers should have a right to know the effect their
-        products have on the environment. <br />
-        We created How Green so that you can find more sustainable options for
-        your favourite products. <br />
-        We show you the data we use to calculate a products sustainability
-        score, so don’t trust us, trust the data! <br />
+  <b-card class="w-50 mx-auto mt-5 p-md-4">
+    <b-card-title title-tag="h1" class="py-2">
+      Why should you use How Green?
+    </b-card-title>
 
-        <h3>Shop using How Green at supported stores</h3>
-        <b-button variant="primary" href="https://www.tesco.com/">
-          <b-icon icon="shop-window"></b-icon>
-          Tesco
+    <p>
+      We believe, consumers should have a right to know the effect their
+      products have on the environment.
+    </p>
+    <p>
+      We created How Green so that you can find more sustainable options for
+      your favourite products.
+    </p>
+    <p>
+      We show you the data we use to calculate a products sustainability
+      score, so don’t trust us, trust the data!
+    </p>
+
+    <b-input-group prepend="Search Tesco" class="mt-3">
+      <b-form-input
+        v-model="searchQuery"
+        placeholder="peanut butter..."
+      >
+      </b-form-input>
+      <b-input-group-append>
+        <b-button
+          variant="outline-success"
+          target="_blank"
+          :href="`https://www.tesco.com/groceries/en-GB/search?query=${searchQuery || 'peanut butter'}`"
+        >
+          <b-icon icon="search" alt="Search"></b-icon>
         </b-button>
-        <b-button variant="primary" href="https://www.sainsburys.co.uk/">
-          <b-icon icon="shop-window"></b-icon>
-          Sainsbury's
+        <b-button
+          variant="info"
+          target="_blank"
+          href="https://www.tesco.com/"
+        >
+          <b-icon icon="house-fill" alt="Main site"></b-icon>
         </b-button>
-      </template>
-    </b-jumbotron>
-  </div>
+      </b-input-group-append>
+    </b-input-group>
+  </b-card>
 </template>
 
 <script>
@@ -29,9 +49,8 @@ export default {
   components: {},
   data() {
     return {
+      searchQuery: "",
     };
-  },
-  computed: {
   },
 };
 </script>

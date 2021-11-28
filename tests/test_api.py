@@ -1,3 +1,4 @@
+import json
 import pytest
 from app import app
 
@@ -18,8 +19,10 @@ def test_random_url_post(client):
 def test_tesco_product_get(client):
     assert client.get('/api/tesco/301510512').status_code == 200
 
-def test_tesco_product_post(client):
-    assert client.post('/api/tesco/301510512').status_code == 201
+def test_tesco_random_product_get(client):
+    response = client.get('/api/tesco/123123')
+    assert response.status_code == 200
+    assert json.loads(response.data.decode()).get("name") == None
 
 def test_tesco_product_patch(client):
     assert client.patch('/api/tesco/301510512').status_code == 405
