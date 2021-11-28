@@ -220,38 +220,38 @@ export default class App extends React.Component<{}, any> {
                           </Row> */}
 
                           <div className="py-2">
-                            <h6>CO2</h6>
-
+                            <h4>CO2</h4>
+                            <h6>Production </h6>
                             <ProgressBar
                               now={product.co2.production}
-                              max={40.5}
-                              label={`Production: ${product.co2.production}`}
-                              variant={this.getVariant((product.co2.production*100/40.5), true)}
+                              max={25.5}
+                              label={` ${product.co2.production} kg`}
+                              variant={this.getVariant((product.co2.production*100/25.5), true)}
                             />
-
+                            <h6>Shipping </h6>
                             <ProgressBar
                               now={product.co2.shipping}
-                              max={40.5}
-                              label={`Shipping: ${product.co2.shipping}`}
-                              variant={this.getVariant((product.co2.shipping*100/40.5), true)}
+                              max={25.5}
+                              label={` ${product.co2.shipping} kg`}
+                              variant={this.getVariant((product.co2.shipping*100/25.5), true)}
                             />
                           </div>
 
                           <div className="py-2">
-                            <h6>Energy</h6>
-
+                            <h4>Energy</h4>
+                            <h6>Production</h6>
                             <ProgressBar
                               now={product.energy.production}
-                              max={40.5}
-                              label={`Production: ${product.energy.production}`}
-                              variant={this.getVariant((product.energy.production*100/40.5), true)}
+                              max={10000}
+                              label={` ${product.energy.production} btu`}
+                              variant={this.getVariant((product.energy.production*100/10000), true)}
                             />
-
+                            <h6>Shipping</h6>
                             <ProgressBar
                               now={product.energy.shipping}
-                              max={40.5}
-                              label={`Shipping: ${product.energy.shipping}`}
-                              variant={this.getVariant((product.energy.shipping*100/40.5), true)}
+                              max={10000}
+                              label={` ${product.energy.shipping} btu`}
+                              variant={this.getVariant((product.energy.shipping*100/10000), true)}
                             />
                           </div>
 
