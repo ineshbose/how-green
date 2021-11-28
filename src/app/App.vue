@@ -1,7 +1,9 @@
 <template>
-  <div id="app" class="bg-gradient-light">
+  <div>
     <Navbar></Navbar>
-    <router-view></router-view>
+    <div id="app">
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -23,6 +25,5 @@ export default {
 #app {
   padding: 5px 10px;
   margin: 0;
-  min-height: 100vh;
 }
 </style>

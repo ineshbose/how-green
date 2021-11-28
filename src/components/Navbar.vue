@@ -1,11 +1,10 @@
 <template>
-  <b-navbar variant="light">
-    <b-navbar-brand to="/">
+  <b-navbar variant="hgreen">
+    <b-navbar-brand to="/" class="text-white">
       <img
         :src="logo"
         alt="How Green Logo"
-        width="40"
-        height="40"
+        height="30"
         class="d-inline-block align-top"
       />
       How Green?
@@ -14,7 +13,7 @@
 </template>
 
 <script>
-import logo from "../assets/img/logo.png";
+import logo from "../assets/img/logo.svg";
 
 export default {
   name: "navbar",

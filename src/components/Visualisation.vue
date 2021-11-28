@@ -27,6 +27,7 @@
 import LineChart from "./charts/LineChart";
 import BarChart from "./charts/BarChart";
 import RadarChart from "./charts/RadarChart";
+import { getProduct } from "../app/api";
 import axios from "axios";
 
 export default {
@@ -46,14 +47,13 @@ export default {
     }
   },
   async mounted() {
-    await this.getProductData();
+    this.product = await getProduct(
+      this.$route.params.store,
+      this.$route.params.id
+    );
     this.fillData();
   },
   methods: {
-    async getProductData() {
-      const response = await axios.get(`http://localhost:5000/api/${this.$route.params.store}/${this.$route.params.id}`);
-      this.product = response.data;
-    },
     fillData() {
       // this.lineData = {
       //   labels: [this.getRandomInt(), this.getRandomInt()],

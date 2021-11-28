@@ -1,4 +1,9 @@
-import axios from 'axios'
+import axios from 'axios';
+
+const productCache = {
+  tesco: {},
+  sainsbury: {},
+}
 
 let $axios = axios.create({
   baseURL: '/api/',
@@ -7,10 +12,10 @@ let $axios = axios.create({
 })
 
 // Request Interceptor
-$axios.interceptors.request.use(function (config) {
-  config.headers['Authorization'] = 'Fake Token'
-  return config
-})
+// $axios.interceptors.request.use(function (config) {
+//   config.headers['Authorization'] = 'Fake Token'
+//   return config
+// })
 
 // Response Interceptor to handle and log errors
 $axios.interceptors.response.use(function (response) {
@@ -21,15 +26,9 @@ $axios.interceptors.response.use(function (response) {
   return Promise.reject(error)
 })
 
-export default {
-
-  fetchResource () {
-    return $axios.get(`resource/xxx`)
-      .then(response => response.data)
-  },
-
-  fetchSecureResource () {
-    return $axios.get(`secure-resource/zzz`)
-      .then(response => response.data)
-  }
+export function getProduct(store, id) {
+  return productCache[store][id] || $axios.get(`${store}/${id}`).then(response => {
+    productCache[store][id] = response.data;
+    return productCache[store][id];
+  });
 }

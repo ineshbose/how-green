@@ -1,4 +1,6 @@
-$theme-colors:();
+$theme-colors:(
+    'hgreen': #00D98F,
+);
 
 $enable-gradients: true;
 
@@ -7,3 +9,6 @@ $enable-gradients: true;
 // BootstrapVue and its default variables
 @import '~bootstrap-vue/src/index.scss';
 
+body {
+    background: #00D98F;
+}
