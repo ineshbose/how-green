@@ -100,8 +100,7 @@ class TescoProduct(Resource):
                         "shipping": round(random.uniform(0.5, 40.5), 2),
                     }
 
-                    waste = round(random.uniform(0.5, 40.5), 2)
-
+                    waste = {"waste": round(random.uniform(0.5, 40.5), 2)}
                     r_score, co2 = (
                         (
                             PRODUCTS_CACHE["tesco"][alt_id]["score"],
@@ -192,7 +191,7 @@ class TescoProduct(Resource):
                 "destination": destination,
                 "distance": origin_distance[origin_random],
                 "fair_trade": fair_trade,
-                "waste": waste,
+                "waste": {"waste": waste},
                 "co2": {
                     "production": c02_production,
                     "shipping": c02_shipping,
