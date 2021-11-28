@@ -100,6 +100,8 @@ class TescoProduct(Resource):
                         "shipping": round(random.uniform(0.5, 40.5), 2),
                     }
 
+                    waste = round(random.uniform(0.5, 40.5), 2)
+
                     r_score, co2 = (
                         (
                             PRODUCTS_CACHE["tesco"][alt_id]["score"],
@@ -123,6 +125,7 @@ class TescoProduct(Resource):
                             "score": r_score,
                             "co2": co2,
                             "energy": energy,
+                            "waste": waste,
                         }
                     )
 
