@@ -200,8 +200,8 @@ export default {
         labels: [
           "C02 Emitted in Production",
           "C02 Emitted in Shipping",
-          "Energy Consumption in Production",
-          "Energy Consumption in Shipping",
+          "Energy used in Production (scaled)",
+          "Energy used in Shipping (scaled)",
           "Waste",
         ],
         datasets: [
@@ -210,8 +210,8 @@ export default {
             data: [
               this.product.co2.production,
               this.product.co2.shipping,
-              this.product.energy.production,
-              this.product.energy.shipping,
+              this.product.energy.production / 400,
+              this.product.energy.shipping / 400,
               this.product.waste,
             ],
             fill: true,
@@ -227,8 +227,8 @@ export default {
             data: [
               alternative.co2.production,
               alternative.co2.shipping,
-              alternative.energy.production,
-              alternative.energy.shipping,
+              alternative.energy.production / 400,
+              alternative.energy.shipping / 400,
               alternative.waste,
             ],
             fill: true,
