@@ -14,30 +14,19 @@
           </b-col>
         </b-row>
 
-        <b-row class="text-center py-2" no-gutters>
-          <b-col md>
-            <b-button
-              variant="outline-secondary"
-              @click="$router.push({ name: 'product-page' })"
-            >
-              <b-icon icon="arrow-left-square"></b-icon>
-              View Overview
-            </b-button>
-          </b-col>
-          <b-col md>
-            <b-button
-              variant="outline-info"
-              @click="$router.push({ name: 'product-vis' })"
-            >
-              <b-icon icon="graph-up"></b-icon>
-              View Graphs
-            </b-button>
-          </b-col>
-        </b-row>
+        <b-pagination
+          class="pt-4"
+          v-if="product.alternatives.length > perPage"
+          v-model="currentPage"
+          :per-page="perPage"
+          :total-rows="product.alternatives.length"
+          align="fill"
+        >
+        </b-pagination>
 
-        <b-list-group class="py-2">
+        <b-list-group class="py-2" style="max-height: 300px; overflowY: auto;">
           <b-list-group-item
-            v-for="alternative in product.alternatives"
+            v-for="alternative in product.alternatives.slice((perPage*(currentPage-1)), perPage*currentPage)"
             :key="alternative.id"
             :variant="getVariant(alternative.score)"
             icon="star-fill"
@@ -64,8 +53,29 @@
             </b-button>
           </b-list-group-item>
         </b-list-group>
-        
+
+        <b-row class="text-center py-4" no-gutters>
+          <b-col md>
+            <b-button
+              variant="outline-secondary"
+              @click="$router.push({ name: 'product-page' })"
+            >
+              <b-icon icon="arrow-left-square"></b-icon>
+              View Overview
+            </b-button>
+          </b-col>
+          <b-col md>
+            <b-button
+              variant="outline-info"
+              @click="$router.push({ name: 'product-vis' })"
+            >
+              <b-icon icon="graph-up"></b-icon>
+              View Graphs
+            </b-button>
+          </b-col>
+        </b-row>
       </b-card-body>
+
       <b-card-body class="text-center m-5" v-else>
         <div class="py-2" v-for="i in [1, 2, 3, 4, 5]" :key="i">
           <b-skeleton></b-skeleton>
@@ -87,8 +97,8 @@ export default {
   data() {
     return {
       product: null,
-      alternativesProducts: null,
-      info: "",
+      perPage: 8,
+      currentPage: 1,
     };
   },
   async mounted() {
@@ -98,24 +108,6 @@ export default {
     );
   },
   methods: {
-    getAlternativeData() {
-      this.alternativesProducts = [this.product.name].concat(
-        this.product.alternatives.map((alternative) => alternative.name)
-      );
-    },
-    getVariant(score) {
-      var scoreVariant = "";
-      if (score > 80) {
-        scoreVariant = "success";
-      } else if (score > 60) {
-        scoreVariant = "info";
-      } else if (score > 40) {
-        scoreVariant = "warning";
-      } else {
-        scoreVariant = "danger";
-      }
-      return scoreVariant;
-    },
   },
 };
 </script>

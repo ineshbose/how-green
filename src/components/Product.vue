@@ -14,6 +14,14 @@
           <b-col>
             <b-card-title>
               {{ product.name }}
+              <b-button
+                variant="link"
+                class="p-0 m-0"
+                target="_blank"
+                :href="`https://www.tesco.com/groceries/en-GB/products/${product.id}`"
+              >
+                <b-icon icon="box-arrow-up-right" alt="View product"></b-icon>
+              </b-button>
             </b-card-title>
           </b-col>
         </b-row>
@@ -28,6 +36,98 @@
             <b-card-title>
               {{ grade }}
             </b-card-title>
+          </b-col>
+        </b-row>
+
+        <b-row class="text-center">
+          <b-col v-if="product.origin">
+            <b-card-sub-title> Origin </b-card-sub-title>
+            <b-img-lazy
+              v-if="product.origin.tld"
+              :alt="`${product.origin.name} flag`"
+              :src="`https://img.geonames.org/flags/m/${product.origin.tld}.png`"
+              class="py-2"
+            >
+            </b-img-lazy>
+            <b-card-title title-tag="h6"> {{ product.origin.name }} </b-card-title>
+          </b-col>
+
+          <b-col v-if="product.destination">
+            <b-card-sub-title> Destination </b-card-sub-title>
+            <b-img-lazy
+              v-if="product.destination.tld"
+              :alt="`${product.destination.name} flag`"
+              :src="`https://img.geonames.org/flags/m/${product.destination.tld}.png`"
+              class="py-2"
+            >
+            </b-img-lazy>
+            <b-card-title title-tag="h6"> {{ product.destination.name }} </b-card-title>
+          </b-col>
+        </b-row>
+
+        <b-row v-if="product.distance" class="text-center pb-4">
+          <b-col>
+            <b-card-sub-title>
+              Distance: {{ product.distance }} km
+            </b-card-sub-title>
+          </b-col>
+        </b-row>
+
+        <b-row class="text-center py-4">
+          <b-col v-if="product.co2">
+            <b-card-sub-title class="py-2"> CO2 </b-card-sub-title>
+
+            <b-progress
+              :max="25.5"
+              height="1.5rem"
+              v-b-tooltip="`Production: ${product.co2.production} kg`"
+            >
+              <b-progress-bar
+                :value="product.co2.production"
+                :variant="getVariant(product.co2.production*100/25.5, true)"
+              >
+              </b-progress-bar>
+            </b-progress>
+
+            <b-progress
+              :max="25.5"
+              height="1.5rem"
+              v-b-tooltip="`Shipping: ${product.co2.shipping} kg`"
+            >
+              <b-progress-bar
+                :value="product.co2.shipping"
+                :variant="getVariant(product.co2.shipping*100/25.5, true)"
+              >
+              </b-progress-bar>
+            </b-progress>
+          </b-col>
+
+          <b-col v-if="product.energy">
+            <b-card-sub-title class="py-2"> Energy </b-card-sub-title>
+
+            <b-progress
+              :max="10000"
+              height="1.5rem"
+              v-b-tooltip="`Production: ${product.energy.production} btu`"
+            >
+              <b-progress-bar
+                :value="product.energy.production"
+                :variant="getVariant(product.energy.production/100, true)"
+              >
+              </b-progress-bar>
+            </b-progress>
+
+            <b-progress
+              :max="10000"
+              height="1.5rem"
+              v-b-tooltip="`Shipping: ${product.energy.shipping} btu`"
+            >
+              <b-progress-bar
+                :value="product.energy.shipping"
+                :variant="getVariant(product.energy.shipping/100, true)"
+              >
+              </b-progress-bar>
+            </b-progress>
           </b-col>
         </b-row>
 
@@ -61,6 +161,7 @@
           </b-col>
         </b-row>
       </b-card-body>
+
       <b-card-body class="text-center m-5" v-else>
         <b-skeleton></b-skeleton>
         <div class="my-2">

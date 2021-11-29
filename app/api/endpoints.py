@@ -8,7 +8,8 @@ from flask_restx import Resource
 
 from . import api_rest
 
-
+MAX_CO2 = 25.5
+MAX_ENERGY = 10000
 PRODUCTS_CACHE = {"tesco": {}, "sainsbury": {}}
 
 
@@ -89,30 +90,30 @@ class TescoProduct(Resource):
                     "img", {"class": "product-image"}
                 )
                 for i in range(len(alternative_names)):
-                    r_score = 0
                     alt_id = alternative_links[i]["href"].split("/")[-1]
 
                     if str(alt_id) == str(product_id):
                         continue
 
-                    energy = {
-                        "production": round(random.uniform(0.5, 40.5), 2),
-                        "shipping": round(random.uniform(0.5, 40.5), 2),
-                    }
-
-                    waste = {"waste": round(random.uniform(0.5, 40.5), 2)}
-                    r_score, co2 = (
+                    r_score, co2, energy, waste = (
                         (
                             PRODUCTS_CACHE["tesco"][alt_id]["score"],
                             PRODUCTS_CACHE["tesco"][alt_id]["co2"],
+                            PRODUCTS_CACHE["tesco"][alt_id]["energy"],
+                            PRODUCTS_CACHE["tesco"][alt_id]["waste"],
                         )
                         if PRODUCTS_CACHE["tesco"].get(alt_id)
                         else (
                             random.randint(1, 100),
                             {
-                                "production": round(random.uniform(0.5, 40.5), 2),
-                                "shipping": round(random.uniform(0.5, 40.5), 2),
+                                "production": round(random.uniform(0.5, MAX_CO2), 2),
+                                "shipping": round(random.uniform(0.5, MAX_CO2), 2),
                             },
+                            {
+                                "production": round(random.uniform(0.5, MAX_ENERGY), 2),
+                                "shipping": round(random.uniform(0.5, MAX_ENERGY), 2),
+                            },
+                            round(random.uniform(0.5, 40.5), 2),
                         )
                     )
 
@@ -169,11 +170,11 @@ class TescoProduct(Resource):
                 "tld": "gb",
             }
 
-            c02_production = round(random.uniform(0.5, 40.5), 2)
-            c02_shipping = round(random.uniform(0.5, 40.5), 2)
+            c02_production = round(random.uniform(0.5, MAX_CO2), 2)
+            c02_shipping = round(random.uniform(0.5, MAX_CO2), 2)
 
-            energy_consumption_prod = round(random.uniform(0.5, 40.5), 2)
-            energy_consumption_ship = round(random.uniform(0.5, 40.5), 2)
+            energy_consumption_prod = round(random.uniform(0.5, MAX_ENERGY), 2)
+            energy_consumption_ship = round(random.uniform(0.5, MAX_ENERGY), 2)
 
             waste = round(random.uniform(0.5, 40.5), 2)
 
@@ -187,11 +188,11 @@ class TescoProduct(Resource):
                 "description": product_description,
                 "price": product_price,
                 "score": score,
-                "origin": {"name": origin_country[origin_random]},
+                "origin": origin_country[origin_random],
                 "destination": destination,
                 "distance": origin_distance[origin_random],
                 "fair_trade": fair_trade,
-                "waste": {"waste": waste},
+                "waste": waste,
                 "co2": {
                     "production": c02_production,
                     "shipping": c02_shipping,

@@ -16,8 +16,11 @@ import {
   Container,
   Row,
   Col,
+  Tooltip,
   InputGroup,
   Form,
+  OverlayTrigger,
+  Popover,
 } from "react-bootstrap";
 import logo from "./logo.svg";
 import "./App.css";
@@ -194,66 +197,129 @@ export default class App extends React.Component<{}, any> {
                     <Card.Body>
                       <Tab.Content>
                         <Tab.Pane eventKey="score">
-                          <h1>{product.score}%</h1>
+                          <h1 className="d-flex justify-content-between align-items-center">
+                            {product.score}%
+                            <Row>
+                              {product.origin && <Col>
+                                  {product.origin.tld
+                                    ? (
+                                      <OverlayTrigger
+                                        overlay={
+                                          <Tooltip id="origin-country">From {product.origin.name}</Tooltip>
+                                        }
+                                      >
+                                        <img
+                                          alt={`${product.origin.name} flag`}
+                                          src={`https://img.geonames.org/flags/m/${product.origin.tld}.png`}
+                                          height="10"
+                                          className="d-inline-block align-top"
+                                        />
+                                      </OverlayTrigger>
+                                    )
+                                    : (
+                                      <>
+                                        From {product.origin.name}
+                                      </>
+                                    )
+                                  }
+                              </Col>}
 
-                          {/* <Row>
-                            {product.origin && <Col>
-                              Origin
-                              {product.origin.tld && <img
-                                alt={`${product.origin.name} flag`}
-                                src={`https://img.geonames.org/flags/m/${product.origin.tld}.png`}
-                                height="30"
-                                className="d-inline-block align-top"
-                              />}
-                              {product.origin.name}
-                            </Col>}
-                            {product.destination && <Col>
-                              Destination
-                              {product.destination.tld && <img
-                                alt={`${product.destination.name} flag`}
-                                src={`https://img.geonames.org/flags/m/${product.destination.tld}.png`}
-                                height="30"
-                                className="d-inline-block align-top"
-                              />}
-                              {product.destination.name}
-                            </Col>}
-                          </Row> */}
+                              {product.destination && <Col>
+                                  {product.destination.tld
+                                    ? (
+                                      <OverlayTrigger
+                                        overlay={
+                                          <Tooltip id="destination-country">To {product.destination.name}</Tooltip>
+                                        }
+                                      >
+                                        <img
+                                          alt={`${product.destination.name} flag`}
+                                          src={`https://img.geonames.org/flags/m/${product.destination.tld}.png`}
+                                          height="10"
+                                          className="d-inline-block align-top"
+                                        />
+                                      </OverlayTrigger>
+                                    )
+                                    : (
+                                      <>
+                                        To {product.destination.name}
+                                      </>
+                                    )
+                                  }
+                              </Col>}
+                            </Row>
+                          </h1>
 
-                          <div className="py-2">
+                          {product.co2 && <div className="py-2">
                             <h4>CO2</h4>
-                            <h6>Production </h6>
-                            <ProgressBar
-                              now={product.co2.production}
-                              max={25.5}
-                              label={` ${product.co2.production} kg`}
-                              variant={this.getVariant((product.co2.production*100/25.5), true)}
-                            />
-                            <h6>Shipping </h6>
-                            <ProgressBar
-                              now={product.co2.shipping}
-                              max={25.5}
-                              label={` ${product.co2.shipping} kg`}
-                              variant={this.getVariant((product.co2.shipping*100/25.5), true)}
-                            />
-                          </div>
 
-                          <div className="py-2">
+                            <OverlayTrigger
+                              placement="top-end"
+                              overlay={
+                                // <Popover id="co2-prod-tooltip">
+                                //   <Popover.Header as="h3">
+                                //     CO2 during Production
+                                //   </Popover.Header>
+
+                                //   <Popover.Body>
+                                //     {product.co2.production} kg
+                                //   </Popover.Body>
+                                // </Popover>
+                                <Tooltip id="co2-prod-tooltip">Production: {product.co2.production} kg </Tooltip>
+                              }
+                            >
+                              <ProgressBar
+                                now={product.co2.production}
+                                max={25.5}
+                                label={`${product.co2.production} kg`}
+                                visuallyHidden
+                                variant={this.getVariant((product.co2.production*100/25.5), true)}
+                              />
+                            </OverlayTrigger>
+
+                            <OverlayTrigger
+                              placement="top-end"
+                              overlay={<Tooltip id="co2-ship-tooltip">Shipping: {product.co2.shipping} kg </Tooltip>}
+                            >
+                              <ProgressBar
+                                now={product.co2.shipping}
+                                max={25.5}
+                                label={`${product.co2.shipping} kg`}
+                                visuallyHidden
+                                variant={this.getVariant((product.co2.shipping*100/25.5), true)}
+                              />
+                            </OverlayTrigger>
+                          </div>}
+
+                          {product.energy && <div className="py-2">
                             <h4>Energy</h4>
-                            <h6>Production</h6>
-                            <ProgressBar
-                              now={product.energy.production}
-                              max={10000}
-                              label={` ${product.energy.production} btu`}
-                              variant={this.getVariant((product.energy.production*100/10000), true)}
-                            />
-                            <h6>Shipping</h6>
-                            <ProgressBar
-                              now={product.energy.shipping}
-                              max={10000}
-                              label={` ${product.energy.shipping} btu`}
-                              variant={this.getVariant((product.energy.shipping*100/10000), true)}
-                            />
-                          </div>
+
+                            <OverlayTrigger
+                              placement="top-end"
+                              overlay={<Tooltip id="energy-prod-tooltip">Production: {product.energy.production} btu </Tooltip>}
+                            >
+                              <ProgressBar
+                                now={product.energy.production}
+                                max={10000}
+                                label={`${product.energy.production} btu`}
+                                visuallyHidden
+                                variant={this.getVariant((product.energy.production/100), true)}
+                              />
+                            </OverlayTrigger>
+
+                            <OverlayTrigger
+                              placement="top-end"
+                              overlay={<Tooltip id="energy-ship-tooltip">Shipping: {product.energy.shipping} btu </Tooltip>}
+                            >
+                              <ProgressBar
+                                now={product.energy.shipping}
+                                max={10000}
+                                label={`${product.energy.shipping} btu`}
+                                visuallyHidden
+                                variant={this.getVariant((product.energy.shipping/100), true)}
+                              />
+                            </OverlayTrigger>
+                          </div>}
 
                           <Button
                             onClick={() => this.goToPage(`http://localhost:8080/product/tesco/${product.id}`)}
@@ -265,7 +331,7 @@ export default class App extends React.Component<{}, any> {
                         </Tab.Pane>
 
                         <Tab.Pane eventKey="alternatives">
-                          <ListGroup>
+                          <ListGroup style={{ maxHeight: '15rem', overflowY: 'auto' }}>
                             {
                               product.alternatives.slice(0, 5).map((alternative: Alternative) => (
                                 <ListGroup.Item
