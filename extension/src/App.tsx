@@ -72,7 +72,7 @@ export default class App extends React.Component<{}, any> {
   }
 
   componentDidMount() {
-    this.setState({ loading: true });
+    this.setState({ loading: true }); // TODO: Fix reset loading when opened
     this.getProduct();
   }
 

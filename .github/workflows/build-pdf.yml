@@ -1,0 +1,27 @@
+name: Build LaTeX document
+
+on:
+  push:
+    paths:
+      - "report.tex"
+
+jobs:
+  build_latex:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Git repository
+        uses: actions/checkout@v2
+      # - name: Add black logo
+      #   run: |
+      #     sed 's/00D98F/1c1c1c/' assets/logo.svg >assets/logo-black.svg
+      - name: Compile LaTeX document
+        uses: xu-cheng/latex-action@v2
+        with:
+          root_file: report.tex
+          latexmk_shell_escape: true
+          extra_system_packages: "inkscape"
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Report
+          path: report.pdf

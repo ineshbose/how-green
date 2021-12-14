@@ -74,6 +74,57 @@ $ yarn run start    # or npm run start
 
 The extension will be in `dist/` with `manifest.json` that can be added to your browser.
 
+### `launch.json` (convenient option)*
+
+```json
+{
+    "configurations": [
+        {
+            "name": "how-green-backend",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/run.py"
+        },
+        {
+            "name": "how-green-frontend",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "yarn",
+            "cwd": "${workspaceFolder}",
+            "runtimeArgs": [
+                "serve"
+            ],
+            "skipFiles": [
+                "<node_internals>/**"
+            ]
+        },
+        {
+            "name": "how-green-extension",
+            "type": "node",
+            "request": "launch",
+            "runtimeExecutable": "yarn",
+            "cwd": "${workspaceFolder}/extension",
+            "runtimeArgs": [
+                "start"
+            ],
+            "skipFiles": [
+                "<node_internals>/**"
+            ]
+        }
+    ],
+    "compounds": [
+        {
+            "name": "How Green",
+            "configurations": [
+                "how-green-backend",
+                "how-green-frontend",
+                "how-green-extension"
+            ]
+        }
+    ]
+}
+```
+
 ### Dev References
 
 * [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions)
@@ -98,3 +149,68 @@ The extension will be in `dist/` with `manifest.json` that can be added to your 
 - Inesh Bose
 - Marc Auf der Heyde
 - Stephen Connolly
+
+## Screenshots
+
+### Extension
+
+<table>
+<tbody>
+<tr>
+    <td>
+        <img src="assets/final/product_page_with_score.png" alt="Extension showing score" />
+    </td>
+    <td>
+        <img src="assets/final/product_page_with_alternatives_hwindow.png" alt="Extension showing alternatives" />
+    </td>
+</tr>
+<tr>
+    <td>
+        <img src="assets/final/extension_tooltips.png" alt="Extension with text on tooltips due to limited space" />
+    </td>
+    <td>
+        <img src="assets/final/extension_loading.png" alt="Extension in loading state" />
+    </td>
+</tr>
+<tr>
+    <td colspan="2">
+        <div align="center">
+            <p align="center">
+                <img src="assets/final/extension_homepage.png" alt="Extension on non-tesco page" />
+            </p>
+        </div>
+    </td>
+</tr>
+</tbody>
+</table>
+
+### Frontend
+
+<table>
+<tbody>
+<tr>
+    <td>
+        <img src="assets/final/product_score_view_more.png" alt="Product score" />
+    </td>
+    <td>
+        <img src="assets/final/product_alternatives_view_more_hwindow.png" alt="Product alternatives" />
+    </td>
+</tr>
+<tr>
+    <td>
+        <img src="assets/final/visualisations_1.png" alt="Product visualisations (1/2)" />
+    </td>
+    <td>
+        <img src="assets/final/visualisations_2.png" alt="Product visualisations (2/2)" />
+    </td>
+</tr>
+<tr>
+    <td>
+        <img src="assets/final/landing_page.png" alt="Home page" />
+    </td>
+    <td>
+        <img src="assets/final/product_page_loading_tablet.png" alt="Loading state" />
+    </td>
+</tr>
+</tbody>
+</table>
