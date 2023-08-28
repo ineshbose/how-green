@@ -15,7 +15,7 @@ jobs:
       #   run: |
       #     sed 's/00D98F/1c1c1c/' assets/logo.svg >assets/logo-black.svg
       - name: Compile LaTeX document
-        uses: xu-cheng/latex-action@v2
+        uses: xu-cheng/latex-action@v3
         with:
           root_file: report.tex
           latexmk_shell_escape: true
